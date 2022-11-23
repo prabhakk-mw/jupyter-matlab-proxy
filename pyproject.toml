@@ -42,11 +42,18 @@ dependencies = [
     "jupyter_contrib_nbextensions",
     "matlab-proxy>=0.2.9",
 ]
+[tool.hatch.build.targets.wheel]
+packages = [
+    "src/jupyter_matlab_kernel",
+    "src/jupyter_matlab_proxy"
+]
 # TODO: The paths here need to be reconsidered.
 [tool.hatch.build.targets.wheel.shared-data]
 "src/jupyter_matlab_labextension/jupyter_matlab_labextension/labextension/static" = "share/jupyter/labextensions/jupyter_matlab_labextension/static"
 "src/jupyter_matlab_labextension/jupyter_matlab_labextension/install.json" = "share/jupyter/labextensions/jupyter_matlab_labextension/install.json"
 "src/jupyter_matlab_labextension/jupyter_matlab_labextension/labextension/package.json" = "share/jupyter/labextensions/jupyter_matlab_labextension/package.json"
+"src/jupyter_matlab_kernel/kernel.json" = "share/jupyter/kernels/jupyter_matlab_kernel/kernel.json"
+"img/logo-64x64.png" = "share/jupyter/kernels/jupyter_matlab_kernel/logo-64x64.png"
 
 [tool.hatch.build.targets.sdist]
 exclude = [

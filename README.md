@@ -187,7 +187,7 @@ In the environment that you have installed the package:
         - Validating: OK  $ pip freeze | grep -E "jupyter|matlab-proxy|jupyter-matlab-proxy"
     
     # IF the server does not show up in the commands above, install:
-    $ pip install jupyter_contrib_nbextensions
+    $ pip install jupyter-contrib-nbextensions
     ```
 
 ## Feedback
