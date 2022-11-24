@@ -1,3 +1,5 @@
+// Copyright 2022 The MathWorks, Inc.
+
 import { ICodeMirror } from '@jupyterlab/codemirror';
 // TODO Button appear when changing to MATLAB kernel, disappear when changing away.
 // TODO Use MATLAB style for comments and strings.
