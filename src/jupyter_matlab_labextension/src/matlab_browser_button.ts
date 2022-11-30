@@ -9,6 +9,7 @@ import { IDisposable } from '@lumino/disposable';
 
 import { matlabIcon } from './icons';
 
+/** Wait until the kernel has loaded, then check if it is a MATLAB kernel. */
 const insertButton = async (panel: NotebookPanel, matlabInBrowserButton: ToolbarButton): Promise<void> => {
     await panel.sessionContext.ready;
     if (panel.sessionContext.kernelDisplayName === 'MATLAB Kernel') {
@@ -18,7 +19,7 @@ const insertButton = async (panel: NotebookPanel, matlabInBrowserButton: Toolbar
 
 export class MatlabInBrowserButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel> {
     createNew (panel: NotebookPanel, context: DocumentRegistry.IContext<INotebookModel>): IDisposable {
-        // Create the toolbar button to open the MATLAB desktop in-browser.
+        /**  Create the toolbar button to open the MATLAB desktop in-browser. */
         const matlabInBrowserButton = new ToolbarButton({
             className: 'openMATLABButton',
             icon: matlabIcon,

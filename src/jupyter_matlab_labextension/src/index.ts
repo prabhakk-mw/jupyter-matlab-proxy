@@ -12,7 +12,7 @@ import { defineMATLABMode } from './matlab_cm_mode';
 import { registerMFiles } from './matlab_files';
 import { MatlabInBrowserButtonExtension } from './matlab_browser_button';
 
-/** Registers the MATLAB in-browser desktop button, which will
+/** Register the MATLAB-in-browser desktop button, which will
  * appear in the notebook toolbar.
  */
 const matlabInBrowserButtonPlugin: JupyterFrontEndPlugin<void> = {
@@ -26,10 +26,10 @@ const matlabInBrowserButtonPlugin: JupyterFrontEndPlugin<void> = {
     }
 };
 
-/** Creates a command to open a new .m file.
- * Adds this command to the Launcher (under "other"),
+/** Create a command to open a new .m file.
+ * Add this command to the Launcher (under "other"),
  * as well as to the command palette (which is opened via ctrl+shift+c).
- * Also associates .m files with the MATLAB icon.
+ * Also associate .m files with the MATLAB mFile icon.
  */
 const matlabMFilesPlugin: JupyterFrontEndPlugin<void> = {
     id: '@mathworks/matlabMFilesPlugin',
@@ -44,8 +44,8 @@ const matlabMFilesPlugin: JupyterFrontEndPlugin<void> = {
     }
 };
 
-/** Adds the MATLAB mode to CodeMirror.
- * app is required, even if it is not used.
+/** Add the MATLAB mode to CodeMirror.
+ * The parameter app is required, even if it is not used.
  */
 const matlabCodeMirrorPlugin: JupyterFrontEndPlugin<void> = {
     id: '@mathworks/matlabCodeMirrorPlugin',

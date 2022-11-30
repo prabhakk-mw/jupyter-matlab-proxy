@@ -1,16 +1,14 @@
 // Copyright 2022 The MathWorks, Inc.
 
 import { ICodeMirror } from '@jupyterlab/codemirror';
-// TODO Button appear when changing to MATLAB kernel, disappear when changing away.
-// TODO Use MATLAB style for comments and strings.
-// TODO highlighting after "format"
-// TODO methods and properties inside classdefs
-// TODO arguments and mustBeNumeric in function definition
+/** TODO Button appear when changing to MATLAB kernel, disappear when changing away.
+ * TODO highlighting after "format"
+ * TODO methods and properties inside classdefs
+ * TODO arguments and mustBeNumeric in function definition */
 
-// Of the default codemirror tokens, "keyword" matches MATLAB comment style best,
-// and variable-2 matches MATLAB keyword style best. These tokens are only used for
-// display and not for execution (investigating how to define custom tokens,
-// possibly using styles, or this https://stackoverflow.com/questions/64858883/how-to-change-specific-token-style-in-code-mirror-editor).
+/** Of the default codemirror tokens, "keyword" matches MATLAB comment style best,
+ * and variable-2 matches MATLAB keyword style best. These tokens are only used for
+ * display and not for execution. */
 export const token_to_matlab_style = new Map<string, string>([
     ["comment", "keyword"],
     ["string", "string-2"],
@@ -18,9 +16,9 @@ export const token_to_matlab_style = new Map<string, string>([
 ]);
 
 const baseRegex = [
-    // The boolean "sol" is needed as the ^ regexp marker doesn't
-    // work as you'd expect in this context because of limitations in JavaScript's RegExp API.
-    // See https://codemirror.net/5/demo/simplemode.html.
+    /** The boolean "sol" is needed as the ^ regexp marker doesn't
+     * work as you'd expect in this context because of limitations in JavaScript's RegExp API.
+     * See https://codemirror.net/5/demo/simplemode.html. */
     { regex: /([\s]*)(%\{)[^\S\n]*$/, token: token_to_matlab_style.get("comment"), next: 'comment', sol: true },
     { regex: /%.*$/, token: token_to_matlab_style.get("comment") },
     { regex: /".*?("|$)/, token: token_to_matlab_style.get("string") },
@@ -31,16 +29,16 @@ const baseRegex = [
     { regex: /\b(switch)\b/, indent: true, token: token_to_matlab_style.get("keyword") }, //, next: "switch"},
     { regex: /\b(catch|else|elseif)\b/, indent: true, dedent: true, token: token_to_matlab_style.get("keyword") },
     { regex: /\b(?:end)\b/, dedent: true, token: token_to_matlab_style.get("keyword") },
-    // Removing (or adding \s* around...) this line breaks tab completion.
+    /** Removing (or adding \s* around) this line breaks tab completion. */
     { regex: /[a-zA-Z_]\w*/, token: "variable" }
 ];
 
-// "Case" needs to be dedented, unless it's after switch;
-// this can be handled using a special state.
-// Keyword "end" after switch needs two dedents.
-// Going to skip case for the moment (which means leaving out "otherwise" too).
-// User will have to manually indent code inside case sections,
-// less pain than being stuck with too many indents.
+/** "Case" needs to be dedented, unless it's after switch;
+ * this can be handled using a special state.
+ * Keyword "end" after switch needs two dedents.
+ * Going to skip case for the moment (which means leaving out "otherwise" too).
+ * User will have to manually indent code inside case sections,
+ * less pain than being stuck with too many indents. */
 const startRegex = baseRegex;// [{regex: /\b(case)\b/, indent:true, dedent: true, token: "keyword"}, ...baseRegex]
 // let switchRegex = [{regex: /\b(case)\b/, indent:true, token: "keyword", next: "start"}, ...baseRegex]
 const multilineCommentRegex = [
