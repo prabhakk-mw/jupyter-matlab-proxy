@@ -7,26 +7,32 @@ import { ICodeMirror } from '@jupyterlab/codemirror';
 // TODO methods and properties inside classdefs
 // TODO arguments and mustBeNumeric in function definition
 
+// Of the default codemirror tokens, "keyword" matches MATLAB comment style best,
+// and variable-2 matches MATLAB keyword style best. These tokens are only used for
+// display and not for execution (investigating how to define custom tokens,
+// possibly using styles, or this https://stackoverflow.com/questions/64858883/how-to-change-specific-token-style-in-code-mirror-editor).
+export const token_to_matlab_style = new Map<string, string>([
+    ["comment", "keyword"],
+    ["string", "string-2"],
+    ["keyword", "variable-2"]
+]);
+
 const baseRegex = [
     // The boolean "sol" is needed as the ^ regexp marker doesn't
     // work as you'd expect in this context because of limitations in JavaScript's RegExp API.
     // See https://codemirror.net/5/demo/simplemode.html.
-    // Of the default codemirror tokens, "keyword" matches MATLAB comment style best,
-    // and variable-2 matches MATLAB keyword style best. These tokens are only used for
-    // display and not for execution (investigating how to define custom tokens,
-    // possibly using styles, or this https://stackoverflow.com/questions/64858883/how-to-change-specific-token-style-in-code-mirror-editor).
-    { regex: /([\s]*)(%\{)[^\S\n]*$/, token: 'keyword', next: 'comment', sol: true },
-    { regex: /%.*$/, token: 'keyword' },
-    { regex: /".*?("|$)/, token: 'string-2' },
-    { regex: /'.*?('|$)/, token: 'string-2' },
-    { regex: /\b(break|case|classdef|continue|global|otherwise|persistent|return|spmd)\b/, token: 'variable-2' },
+    { regex: /([\s]*)(%\{)[^\S\n]*$/, token: token_to_matlab_style.get("comment"), next: 'comment', sol: true },
+    { regex: /%.*$/, token: token_to_matlab_style.get("comment") },
+    { regex: /".*?("|$)/, token: token_to_matlab_style.get("string") },
+    { regex: /'.*?('|$)/, token: token_to_matlab_style.get("string") },
+    { regex: /\b(break|case|classdef|continue|global|otherwise|persistent|return|spmd)\b/, token: token_to_matlab_style.get("keyword") },
     { regex: /(\bimport\b)(.*)(?=;|%|$)/, token: ['variable', 'meta', 'variable'] },
-    { regex: /\b(arguments|enumeration|events|for|function|if|methods|parfor|properties|try|while)\b/, indent: true, token: 'variable-2' },
-    { regex: /\b(switch)\b/, indent: true, token: 'variable-2' }, //, next: "switch"},
-    { regex: /\b(catch|else|elseif)\b/, indent: true, dedent: true, token: 'variable-2' },
-    { regex: /\b(?:end)\b/, dedent: true, token: 'variable-2' },
+    { regex: /\b(arguments|enumeration|events|for|function|if|methods|parfor|properties|try|while)\b/, indent: true, token: token_to_matlab_style.get("keyword") },
+    { regex: /\b(switch)\b/, indent: true, token: token_to_matlab_style.get("keyword") }, //, next: "switch"},
+    { regex: /\b(catch|else|elseif)\b/, indent: true, dedent: true, token: token_to_matlab_style.get("keyword") },
+    { regex: /\b(?:end)\b/, dedent: true, token: token_to_matlab_style.get("keyword") },
     // Removing (or adding \s* around...) this line breaks tab completion.
-    { regex: /[a-zA-Z_]\w*/, token: 'variable' }
+    { regex: /[a-zA-Z_]\w*/, token: "variable" }
 ];
 
 // "Case" needs to be dedented, unless it's after switch;
@@ -38,8 +44,8 @@ const baseRegex = [
 const startRegex = baseRegex;// [{regex: /\b(case)\b/, indent:true, dedent: true, token: "keyword"}, ...baseRegex]
 // let switchRegex = [{regex: /\b(case)\b/, indent:true, token: "keyword", next: "start"}, ...baseRegex]
 const multilineCommentRegex = [
-    { regex: /([\s]*)(%\})[^\S\n]*(?:$)/, token: 'keyword', next: 'start', sol: true },
-    { regex: /.*/, token: 'keyword' }
+    { regex: /([\s]*)(%\})[^\S\n]*(?:$)/, token: token_to_matlab_style.get("comment"), next: 'start', sol: true },
+    { regex: /.*/, token: token_to_matlab_style.get("comment") }
 ];
 
 /** Install mode in CodeMirror */
