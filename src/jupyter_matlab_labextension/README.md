@@ -11,6 +11,6 @@ part of the [MATLAB Integration for Jupyter](../../README.md).
 
 ----
 
-Copyright (c) 2021-2022 The MathWorks, Inc. All rights reserved.
+Copyright (c) 2022 The MathWorks, Inc. All rights reserved.
 
 ----
