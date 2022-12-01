@@ -12,6 +12,10 @@ For MATLAB code written in JupyterLab, this integration enables certain features
 * [Proxy](src/jupyter_matlab_proxy/README.md)
   * access MATLAB in a browser from your Jupyter environment 
 
+<p align="center">
+  <img width="600" src="img/jupyterlab_cell_example.png">
+</p>
+
 For more detail, on how to use these features see [Usage](#usage).
 For more information on the features associated with each component, see
 the [kernel README](src/jupyter_matlab_kernel/README.md),
@@ -31,7 +35,7 @@ To report any issues or suggestions, see the [Feedback](#feedback) section.
 * The dependencies required to run MATLAB.
   Refer to the Dockerfiles in the [matlab-deps](https://github.com/mathworks-ref-arch/container-images/tree/master/matlab-deps) repository for the desired version of MATLAB.
 
-* JupyterLab 3 [TO CHECK]
+* JupyterLab version: **3** [TO CHECK]
 
 * Python versions: **3.7** | **3.8** | **3.9**  | **3.10**
   
