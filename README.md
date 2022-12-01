@@ -1,15 +1,22 @@
 # MATLAB Integration for Jupyter
 
-The MATLAB Integration for Jupyter allows you to develop and execute MATLAB code in a Jupyter notebook,
-by providing a MATLAB kernel for use with Jupyter. 
+The MATLAB Integration for Jupyter allows you to develop and execute MATLAB code in a Jupyter notebook.
 
-For MATLAB code written in JupyterLab, this integration enables features such as
-* execution of MATLAB code
-* tab completion
-* syntax highlighting
-* autoindentation
+This integration is comprised of a Jupyter kernel, a Jupyterlab labextension, and a proxy.
+For MATLAB code written in JupyterLab, this integration enables a user to:
+* [Kernel](src/jupyter_matlab_kernel/README.md)
+  * execute MATLAB code
+  * write code using tab completion
+* [Labextension](src/jupyter_matlab_labextension/README.md)
+  * write code with syntax highlighting and autoindentation
+* [Proxy](src/jupyter_matlab_proxy/README.md)
+  * access MATLAB in a browser from your Jupyter environment 
 
-It also enables you to access MATLAB in a browser from your Jupyter environment. 
+For more detail, on how to use these features see [Usage](#usage)
+For more information on the features associated with each component, see
+the [kernel README](src/jupyter_matlab_kernel/README.md),
+the [labextension README](src/jupyter_matlab_labextension/README.md),
+and the [proxy README](src/jupyter_matlab_proxy/README.md).
 
 To report any issues or suggestions, see the [Feedback](#feedback) section.
 
@@ -23,8 +30,14 @@ To report any issues or suggestions, see the [Feedback](#feedback) section.
   ```  
 * The dependencies required to run MATLAB.
   Refer to the Dockerfiles in the [matlab-deps](https://github.com/mathworks-ref-arch/container-images/tree/master/matlab-deps) repository for the desired version of MATLAB.
+
+* JupyterLab 3 [TO CHECK]
+
+* Python versions: **3.7** | **3.8** | **3.9**  | **3.10**
   
 * X Virtual Frame Buffer (Xvfb) : (only for Linux® based systems)
+
+  **This should be automatically installed as a dependency?**
 
   Install it on your linux machine using:
   ```bash
@@ -68,6 +81,8 @@ python -m pip install .
 
 ## Usage
 
+## Starting JupyterLab
+
 Upon successful installation of `jupyter-matlab-proxy`, your Jupyter environment should present options to launch a
 Jupyter notebook with a MATLAB kernel, and to access MATLAB in a browser.
 
@@ -80,7 +95,7 @@ Jupyter notebook with a MATLAB kernel, and to access MATLAB in a browser.
   jupyter lab 
   ```
 
-## JupyterLab options
+### JupyterLab options
 
 * **TODO: Add screenshots once kernel is integrated and icons are finalised.**
 
@@ -99,47 +114,6 @@ Jupyter notebook with a MATLAB kernel, and to access MATLAB in a browser.
 or use a network license manager. Follow the [licensing](#licensing) instructions below.
 * Wait for the MATLAB session to start. This can take several minutes.
 * Each MATLAB notebook is backed by the same MATLAB session, and therefore allows access to the same state.
-
-## Access MATLAB in a browser
-* If you are using Jupyter Notebook (on the left in figure below), on the `New` menu, select `MATLAB`. If you are using JupyterLab (on the right in figure below), select the MATLAB icon on the launcher.
-
-<p align="center">
-  <img width="600" src="https://github.com/mathworks/jupyter-matlab-proxy/raw/main/img/combined_launchers.png">
-</p>
-
-* If you have opened a JupyterLab notebook with a MATLAB kernel, click the `MATLAB` button in the toolbar.
-**TODO: insert screenshot when kernel is integrated and icons are finalised**
-
-* Follow the [licensing](#licensing) instructions below.
-* Wait for the MATLAB session to start. This can take several minutes.
-
-<p align="center">
-  <img width="800" src="https://github.com/mathworks/jupyter-matlab-proxy/raw/main/img/jupyter_matlab_desktop.png">
-</p>
-
-* To manage the MATLAB integration for Jupyter, click the tools icon shown below.
-
-<p align="center">
-  <img width="100" src="https://github.com/mathworks/jupyter-matlab-proxy/raw/main/img/tools_icon.png">
-</p>
-
-* Clicking the tools icon opens a status panel with buttons like the ones below:
-
-    <p align="center">
-      <img width="800" src="https://github.com/mathworks/jupyter-matlab-proxy/raw/main/img/status_panel.png">
-    </p>
-
-   The following options are available in the status panel (some options are only available in a specific context):
-
-  | Option |  Description |
-  | ---- | ---- |
-  | Start MATLAB Session | Start your MATLAB session. Available if MATLAB is stopped.|
-  | Restart MATLAB Session | Restart your MATLAB session. Available if MATLAB is running or starting.|
-  | Stop MATLAB Session | Stop your MATLAB session. Use this option if you want to free up RAM and CPU resources. Available if MATLAB is running or starting.|
-  | Sign Out | Sign out of MATLAB. Use this to stop MATLAB and sign in with an alternative account. Available if using online licensing.|
-  | Unset License Server Address | Unset network license manager server address. Use this to stop MATLAB and enter new licensing information. Available if using network license manager.|
-  | Feedback | Send us feedback. This action opens your default email application.|
-  | Help | Open a help pop-up for a detailed description of the options.|
 
 ## Licensing
 
