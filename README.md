@@ -1,8 +1,13 @@
 # MATLAB Integration for Jupyter
 
 The MATLAB Integration for Jupyter allows you to develop and execute MATLAB code in a Jupyter notebook,
-by providing a MATLAB kernel for use with Jupyter. It enables features such as tab completion, syntax
-highlighting and autoindentation for MATLAB code written in JupyterLab.
+by providing a MATLAB kernel for use with Jupyter. 
+
+For MATLAB code written in JupyterLab, this integration enables features such as
+* execution of MATLAB code
+* tab completion
+* syntax highlighting
+* autoindentation
 It also enables you to access MATLAB in a browser from your Jupyter environment. 
 
 To report any issues or suggestions, see the [Feedback](#feedback) section.
