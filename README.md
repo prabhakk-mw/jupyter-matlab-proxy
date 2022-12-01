@@ -41,7 +41,7 @@ To report any issues or suggestions, see the [Feedback](#feedback) section.
   
 * X Virtual Frame Buffer (Xvfb) : (only for Linux® based systems)
 
-  **This should be automatically installed as a dependency?**
+  [** TO CHECK: This should be automatically installed as a dependency?**]
 
   Install it on your linux machine using:
   ```bash
