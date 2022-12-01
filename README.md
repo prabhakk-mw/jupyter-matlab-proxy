@@ -8,6 +8,7 @@ For MATLAB code written in JupyterLab, this integration enables features such as
 * tab completion
 * syntax highlighting
 * autoindentation
+
 It also enables you to access MATLAB in a browser from your Jupyter environment. 
 
 To report any issues or suggestions, see the [Feedback](#feedback) section.
