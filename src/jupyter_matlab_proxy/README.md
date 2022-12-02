@@ -22,34 +22,6 @@ This package has the same requirements as its dependencies:
 * See [Requirements](https://github.com/jupyterhub/jupyter-server-proxy#requirements) from `jupyter-server-proxy`
 * See [Requirements](https://github.com/mathworks/matlab-proxy#requirements) from `matlab-proxy`
 
-## Installation
-
-### PyPI
-This repository can be installed directly from the Python Package Index.
-```bash
-python -m pip install jupyter-matlab-proxy
-```
-
-If you want to use this integration with JupyterLab®, ensure that you have JupyterLab installed on your machine by running the following command:
-```bash
-python -m pip install jupyterlab
-```
-
-You should then install `jupyterlab-server-proxy` JupyterLab extension. To install the extension, use the following command:
-
-``` bash
-jupyter labextension install @jupyterlab/server-proxy
-```
-
-### Building From Sources
-```bash
-git clone https://github.com/mathworks/jupyter-matlab-proxy.git
-
-cd jupyter-matlab-proxy
-
-python -m pip install .
-```
-
 ## Usage
 
 Upon successful installation of `jupyter-matlab-proxy`, your Jupyter environment should present options to launch MATLAB.
@@ -69,11 +41,7 @@ Upon successful installation of `jupyter-matlab-proxy`, your Jupyter environment
   <img width="600" src="https://github.com/mathworks/jupyter-matlab-proxy/raw/main/img/combined_launchers.png">
 </p>
 
-* If prompted to do so, enter credentials for a MathWorks account associated with a MATLAB license. If you are using a network license manager, change to the _Network License Manager_ tab and enter the license server address instead. To determine the appropriate method for your license type, consult [MATLAB Licensing Info](https://github.com/mathworks/jupyter-matlab-proxy/blob/main/MATLAB-Licensing-Info.md).
-
-<p align="center">
-  <img width="400" src="https://github.com/mathworks/jupyter-matlab-proxy/raw/main/img/licensing_GUI.png">
-</p>
+* To enter your license information, see [Licensing](../../README.md#licensing).
 
 * Wait for the MATLAB session to start. This can take several minutes.
 <p align="center">
@@ -185,11 +153,6 @@ In the environment that you have installed the package:
     # IF the server does not show up in the commands above, install:
     $ pip install jupyter-contrib-nbextensions
     ```
-
-## Feedback
-
-We encourage you to try this repository with your environment and provide feedback.
-If you encounter a technical issue or have an enhancement request, create an issue [here](https://github.com/mathworks/jupyter-matlab-proxy/issues) or send an email to `jupyter-support@mathworks.com`
 
 ----
 

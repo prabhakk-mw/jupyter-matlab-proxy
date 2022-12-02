@@ -127,11 +127,7 @@ or use a network license manager. Follow the [licensing](#licensing) instruction
   <img width="400" src="https://github.com/mathworks/jupyter-matlab-proxy/raw/main/img/licensing_GUI.png">
 </p>
 
-## Limitations
-This package supports the same subset of MATLAB features and commands as MATLAB® Online, except there is no support for Simulink® Online.
-[Click here for a full list of Specifications and Limitations for MATLAB Online](https://www.mathworks.com/products/matlab-online/limitations.html). 
-
-If you need to use functionality that is not yet supported, or for versions of MATLAB earlier than R2020b, you can use the alternative [MATLAB Integration for Jupyter using VNC](https://github.com/mathworks/jupyter-matlab-vnc-proxy).
+* Wait for the MATLAB session to start. This can take several minutes.
 
 ## Integration with JupyterHub
 
