@@ -75,6 +75,8 @@ Installing this package will also install [JupyterLab](https://jupyterlab.readth
 You must have [MATLAB](https://www.mathworks.com/help/install/install-products.html) installed to execute MATLAB code through Jupyter.
 
 ### Building From Sources
+Building from sources requires Node.js® version 16 [TO CHECK] or higher.
+To install Node.js see [Node.js downloads](https://nodejs.org/en/download/).
 ```bash
 git clone https://github.com/mathworks/jupyter-matlab-proxy.git
 
