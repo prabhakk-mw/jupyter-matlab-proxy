@@ -1,5 +1,9 @@
 // Copyright 2022 The MathWorks, Inc.
 
+import {
+    JupyterFrontEnd,
+    JupyterFrontEndPlugin
+} from '@jupyterlab/application';
 import { ToolbarButton } from '@jupyterlab/apputils';
 import { PageConfig } from '@jupyterlab/coreutils';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
@@ -34,3 +38,14 @@ export class MatlabInBrowserButtonExtension implements DocumentRegistry.IWidgetE
         return matlabInBrowserButton;
     }
 }
+
+export const matlabInBrowserButtonPlugin: JupyterFrontEndPlugin<void> = {
+    id: '@mathworks/matlabInBrowserButtonPlugin',
+    autoStart: true,
+    activate: (
+        app: JupyterFrontEnd
+    ) => {
+        const matlabInBrowserButton = new MatlabInBrowserButtonExtension();
+        app.docRegistry.addWidgetExtension('Notebook', matlabInBrowserButton);
+    }
+};

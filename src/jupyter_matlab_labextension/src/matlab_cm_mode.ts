@@ -1,5 +1,9 @@
 // Copyright 2022 The MathWorks, Inc.
 
+import {
+    JupyterFrontEnd,
+    JupyterFrontEndPlugin
+} from '@jupyterlab/application';
 import { ICodeMirror } from '@jupyterlab/codemirror';
 /** TODO Button appear when changing to MATLAB kernel, disappear when changing away.
  * TODO highlighting after "format"
@@ -69,3 +73,15 @@ export function defineMATLABMode ({ CodeMirror }: ICodeMirror) {
         file: /^[a-zA-Z][a-zA-Z0-9_]*\.m$/
     });
 }
+
+export const matlabCodeMirrorPlugin: JupyterFrontEndPlugin<void> = {
+    id: '@mathworks/matlabCodeMirrorPlugin',
+    autoStart: true,
+    requires: [ICodeMirror],
+    activate: (
+        app: JupyterFrontEnd,
+        codeMirror: ICodeMirror,
+    ) => {
+        defineMATLABMode(codeMirror);
+    }
+};

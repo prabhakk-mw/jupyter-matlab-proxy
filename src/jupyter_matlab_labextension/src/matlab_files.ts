@@ -1,6 +1,9 @@
 // Copyright 2022 The MathWorks, Inc.
 
-import { JupyterFrontEnd } from '@jupyterlab/application';
+import {
+    JupyterFrontEnd,
+    JupyterFrontEndPlugin
+} from '@jupyterlab/application';
 import { ICommandPalette } from '@jupyterlab/apputils';
 import { ILauncher } from '@jupyterlab/launcher';
 
@@ -66,3 +69,16 @@ export function registerMFiles ( app: JupyterFrontEnd, launcher: ILauncher | nul
             icon: mFileIcon
         });
 }
+
+export const matlabMFilesPlugin: JupyterFrontEndPlugin<void> = {
+    id: '@mathworks/matlabMFilesPlugin',
+    autoStart: true,
+    optional: [ILauncher, ICommandPalette],
+    activate: (
+        app: JupyterFrontEnd,
+        launcher: ILauncher | null,
+        palette: ICommandPalette | null
+    ) => {
+        registerMFiles(app, launcher, palette);
+    }
+};
