@@ -2,8 +2,10 @@
 
 The MATLAB Integration for Jupyter allows you to develop and execute MATLAB code in a Jupyter notebook.
 
-This integration is comprised of a Jupyter kernel, a Jupyterlab labextension, and a proxy.
-For MATLAB code written in JupyterLab, this integration enables certain features.
+This package contains a Jupyter kernel, a Jupyterlab labextension, and a proxy.
+For MATLAB code written in JupyterLab, this package enables the execution of MATLAB code
+in JupyterLab, and provides features which improve the experience of writing code in JupyterLab.
+The different parts of this package provide the following capabilities:
 * [Kernel](src/jupyter_matlab_kernel/README.md)
   * execute MATLAB code
   * write code using tab completion
@@ -13,7 +15,7 @@ For MATLAB code written in JupyterLab, this integration enables certain features
   * access MATLAB in a browser from your Jupyter environment 
 
 <p align="center">
-  <img width="600" src="img/jupyterlab_cell_example.png">
+  <img width="600" src="img/jupyterlab_cell_example.png"/>
 </p>
 
 For more detail, on how to use these features see [Usage](#usage).

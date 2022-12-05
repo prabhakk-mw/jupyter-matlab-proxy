@@ -16,12 +16,6 @@ It is provided as part of the [MATLAB Integration for Jupyter](../../README.md).
 To report any issues or suggestions, see the [Feedback](#feedback) section.
 
 ----
-## Requirements
-
-This package has the same requirements as its dependencies:
-* See [Requirements](https://github.com/jupyterhub/jupyter-server-proxy#requirements) from `jupyter-server-proxy`
-* See [Requirements](https://github.com/mathworks/matlab-proxy#requirements) from `matlab-proxy`
-
 ## Usage
 
 Upon successful installation of `jupyter-matlab-proxy`, your Jupyter environment should present options to launch MATLAB.
@@ -77,14 +71,6 @@ This package supports the same subset of MATLAB features and commands as MATLABÂ
 [Click here for a full list of Specifications and Limitations for MATLAB Online](https://www.mathworks.com/products/matlab-online/limitations.html). 
 
 If you need to use functionality that is not yet supported, or for versions of MATLAB earlier than R2020b, you can use the alternative [MATLAB Integration for Jupyter using VNC](https://github.com/mathworks/jupyter-matlab-vnc-proxy).
-
-## Integration with JupyterHub
-
-To use this integration with JupyterHubÂ®, you must install the `jupyter-matlab-proxy` Python package in the Jupyter environment launched by your JupyterHub platform. 
-
-For example, if your JupyterHub platform launches Docker containers, then install this package in the Docker image used to launch them.
-
-A reference architecture that installs `jupyter-matlab-proxy` in a Docker image is available at: [Use MATLAB Integration for Jupyter in a Docker Container](https://github.com/mathworks-ref-arch/matlab-integration-for-jupyter/tree/main/matlab).
 
 ## Troubleshooting
 
