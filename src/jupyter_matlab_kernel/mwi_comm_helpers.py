@@ -23,7 +23,7 @@ def fetch_matlab_proxy_status(url, headers):
         Tuple (bool, string):
             is_matlab_licensed (bool): True if matlab-proxy has license information, else False.
             matlab_status (string): Status of MATLAB. Values could be "up", "down" and "starting"
-    
+
     Raises:
         HTTPError: Occurs when connection to matlab-proxy cannot be established.
     """
@@ -54,6 +54,37 @@ def send_execution_request_to_matlab(url, headers, code):
         HTTPError: Occurs when connection to matlab-proxy cannot be established.
     """
     resp = _send_jupyter_request_to_matlab(url, headers, "execute", [code])
+    return resp["results"][0]
+
+
+def send_completion_request_to_matlab(url, headers, code, cursor_pos):
+    """
+    Fetch Tab completion results.
+
+    Args:
+        url (string): Url of matlab-proxy server
+        headers (dict): HTTP headers required for communicating with matlab-proxy
+        code (string): MATLAB code on which Tab completion is requested.
+        cursor_pos (int): Position of the cursor when Tab completion is requested.
+
+    Returns:
+        Dict: Tab completion results similar to ipykernel's do_complete method.
+              Example: {
+                "matches": ["plot"],
+                "start": 0,
+                "end": 3,
+                "completions": [{
+                    "type": "function",
+                    "text": "plot",
+                    "start": 0,
+                    "end": 3
+                }]
+              }
+
+    Raises:
+        HTTPError: Occurs when connection to matlab-proxy cannot be established.
+    """
+    resp = _send_jupyter_request_to_matlab(url, headers, "complete", [code, cursor_pos])
     return resp["results"][0]
 
 
