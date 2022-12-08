@@ -39,8 +39,9 @@ def setup_matlab():
     logger.info("Initializing Jupyter MATLAB Proxy")
 
     # Get MATLAB icon from matlab_proxy
-    package_path = Path(inspect.getfile(matlab_proxy)).parent
-    icon_path = package_path / "icons" / "matlab.svg"
+    #package_path = Path(inspect.getfile(matlab_proxy)).parent
+    #icon_path = package_path / "icons" / "matlab.svg"
+    icon_path = Path(__file__).parent / "icon_open_matlab.svg"
     logger.debug(f"Icon_path:  {icon_path}")
     logger.debug(f"Launch Command: {matlab_proxy.get_executable_name()}")
     logger.debug(f"Extension Name: {config['extension_name']}")

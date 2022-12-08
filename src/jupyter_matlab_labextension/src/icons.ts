@@ -3,14 +3,27 @@
 import { LabIcon } from '@jupyterlab/ui-components';
 
 import membraneSvgStr from '../style/icons/membrane.svg';
-import mFileSvgStr from '../style/icons/mFile.svg';
+//import mFileSvgStr from '../style/icons/mFile.svg';
+import newMFileSvgStr from '../style/icons/icon_new_mfile.svg';
+import notebookSvgStr from '../style/icons/icon_notebook.svg';
+import openMATLABSvgStr from '../style/icons/icon_open_matlab.svg';
 
 export const matlabIcon = new LabIcon({
     name: 'matlabIcon',
     svgstr: membraneSvgStr
 });
 
-export const mFileIcon = new LabIcon({
-    name: 'mFileIcon',
-    svgstr: mFileSvgStr
+export const openMATLABIcon = new LabIcon({
+    name: 'openMATLABIcon',
+    svgstr: openMATLABSvgStr
+});
+
+export const newMFileIcon = new LabIcon({
+    name: 'newMFileIcon',
+    svgstr: newMFileSvgStr
+});
+
+export const notebookIcon = new LabIcon({
+    name: 'notebookIcon',
+    svgstr: notebookSvgStr
 });

@@ -9,7 +9,7 @@ import { ILauncher } from '@jupyterlab/launcher';
 
 import { ReadonlyPartialJSONObject } from '@lumino/coreutils';
 
-import { mFileIcon } from './icons';
+import { newMFileIcon, matlabIcon } from './icons';
 
 const FACTORY = 'Editor';
 const PALETTE_CATEGORY = 'Other';
@@ -39,7 +39,7 @@ export function registerMFiles ( app: JupyterFrontEnd, launcher: ILauncher | nul
         commands.addCommand(command, {
             label: (args) => (args.isPalette ? 'New MATLAB File' : 'MATLAB File'),
             caption: 'Create a new MATLAB file',
-            icon: (args) => (args.isPalette ? '' : mFileIcon),
+            icon: (args) => (args.isPalette ? '' : newMFileIcon),
             execute: createNewMatlabFile
         });
 
@@ -66,7 +66,7 @@ export function registerMFiles ( app: JupyterFrontEnd, launcher: ILauncher | nul
             displayName: 'MATLAB File',
             extensions: ['.m'],
             mimeTypes: ['text/x-matlab', 'matlab'],
-            icon: mFileIcon
+            icon: matlabIcon
         });
 }
 

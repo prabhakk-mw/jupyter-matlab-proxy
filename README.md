@@ -1,14 +1,14 @@
 # MATLAB Integration for Jupyter
 
-MATLAB Integration for Jupyter allows you to develop and execute MATLAB code in a Jupyter notebook and JupterLab.
+MATLAB Integration for Jupyter allows you to develop and execute MATLAB code in JupyterLab.
 
 * For MATLAB code written in a JupyterLab notebook, this package enables you to
   * execute MATLAB code.
-  * write code with tab completion.
+  * make use of tab completion.
   * write code with syntax highlighting and autoindentation.
 * This package also enables you to
   * access MATLAB in a browser from your Jupyter environment.
-  * create ".m" files in JupyterLab.
+  * create `.m` files in JupyterLab.
 
 <p align="center">
   <img width="600" src="img/jupyterlab_cell_example.png"/>
@@ -52,10 +52,9 @@ To report any issues or suggestions, see the [Feedback](#feedback) section.
   xorg-x11-server-Xvfb.x86_64 : A X Windows System virtual framebuffer X server.
   $ sudo yum install xorg-x11-server-Xvfb
   ```
-* Python versions: **3.7** | **3.8** | **3.9**  | **3.10**
 * [Browser Requirements](https://www.mathworks.com/support/requirements/browser-requirements.html)
 
-* Supported Operating Systems:
+* Supported Operating Systems [TO CHECK]:
     * Linux®
     * Windows® Operating System ( starting v0.4.0 of matlab-proxy )
     * MacOS (starting v0.5.0 of matlab-proxy )
@@ -70,7 +69,8 @@ python -m pip install jupyter-matlab-proxy
 
 Installing this package will also install [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) and [Jupyter Server Proxy](https://jupyter-server-proxy.readthedocs.io/en/latest/) on your machine, if they are not installed already.
 
-You must have [MATLAB](https://www.mathworks.com/help/install/install-products.html) installed to execute MATLAB code through Jupyter.
+You must have [MATLAB](https://www.mathworks.com/help/install/install-products.html) installed to execute MATLAB code through Jupyter,
+installing this package will not automatically install MATLAB.
 
 ### Building From Sources
 Building from sources requires Node.js® version 16 [TO CHECK] or higher.

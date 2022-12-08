@@ -5,7 +5,8 @@ with MATLAB code in Jupyter. It is provided as
 part of the [MATLAB Integration for Jupyter](../../README.md).
 
 ## Supported Features
-* Syntax highlighting/autoindentation of MATLAB code.
+* Syntax highlighting
+* Autoindentation
 * Creating ".m" files in JupyterLab. 
 * Open MATLAB in the browser via a MATLAB notebook toolbar button.
 
