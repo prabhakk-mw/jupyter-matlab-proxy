@@ -23,7 +23,7 @@ class MATLABConnectionError(Exception):
 
     def __init__(self, message=None):
         if message is None:
-            message = 'Error connecting to MATLAB. Check the status of MATLAB by clicking the "Open MATLAB Desktop" button. Restart the kernel after MATLAB is running successfully'
+            message = 'Error connecting to MATLAB. Check the status of MATLAB by clicking the "Open MATLAB" button. Restart the kernel after MATLAB is running successfully'
         super().__init__(message)
 
 
@@ -184,8 +184,41 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
         }
 
     def do_complete(self, code, cursor_pos):
-        # TODO: Implement Tab completion
-        return super().do_complete(code, cursor_pos)
+        """
+        Used by ipykernel infrastructure for tab completion. For more info, look
+        at https://jupyter-client.readthedocs.io/en/stable/messaging.html#completion
+
+        Note: Apart from completion results, no other data can be presented to
+              user. For example, if matlab-proxy is not licensed, we cannot show
+              the licensing window.
+        """
+        # Default completion results. It is modelled after ipkernel.py#do_complete
+        # implementation to provide metadata for JupyterLab.
+        completion_results = {
+            "matches": [],
+            "start": cursor_pos,
+            "end": cursor_pos,
+            "completions": [],
+        }
+
+        # Fetch tab completion results. Blocks untils either tab completion
+        # results are received from MATLAB or communication with MATLAB fails.
+        try:
+            completion_results = mwi_comm_helpers.send_completion_request_to_matlab(
+                self.murl, self.headers, code, cursor_pos
+            )
+        except HTTPError as e:
+            pass
+
+        return {
+            "status": "ok",
+            "matches": completion_results["matches"],
+            "cursor_start": completion_results["start"],
+            "cursor_end": completion_results["end"],
+            "metadata": {
+                "_jupyter_types_experimental": completion_results["completions"]
+            },
+        }
 
     def do_is_complete(self, code):
         # TODO: Seems like indentation rules. https://jupyter-client.readthedocs.io/en/stable/messaging.html#code-completeness
@@ -283,8 +316,9 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
                 self.matlab_status,
             ) = mwi_comm_helpers.fetch_matlab_proxy_status(self.murl, self.headers)
 
-        # If MATLAB is not available after 15 seconds, display connection
-        # error to the user.
+        # If MATLAB is not available after 15 seconds of licensing information
+        # being available either through user input or through matlab-proxy cache,
+        # then display connection error to the user.
         if timeout == 15:
             raise MATLABConnectionError
 
