@@ -1,7 +1,7 @@
 # Jupyter MATLAB Kernel
 
 This package provides a MATLAB language kernel for Jupyter. It is provided as
-part of the [MATLAB Integration for Jupyter](../../README.md).
+part of [MATLAB Integration for Jupyter](../../README.md).
 
 ## Supported Features
 * Execution of MATLAB code

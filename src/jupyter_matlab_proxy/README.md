@@ -5,7 +5,7 @@
 ---
 
 The Jupyter MATLAB Proxy enables you to access MATLAB in a web browser from your Jupyter environment.
-It is provided as part of the [MATLAB Integration for Jupyter](../../README.md).
+It is provided as part of [MATLAB Integration for Jupyter](../../README.md).
 
 `jupyter-matlab-proxy` is a Python® package based on the following packages.
 | Package | Description |
