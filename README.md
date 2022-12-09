@@ -97,7 +97,6 @@ Jupyter notebook with a MATLAB kernel, and to access MATLAB in a browser.
   jupyter lab 
   ```
 ## JupyterLab Options
-* **TODO: Add screenshots once kernel is integrated and icons are finalised.**
 * When JupyterLab is opened you will be presented with multiple options.
 
 <p align="center">
@@ -110,7 +109,7 @@ or use a network license manager. Follow the [licensing](#licensing) instruction
 * Wait for the MATLAB session to start. This can take several minutes.
 * Each MATLAB notebook is backed by the same MATLAB session, and therefore allows access to the same state.
 * You can also open a JupyterLab console and execute MATLAB code there.
-### Open MATLAB: Access MATLAB in a Browser from JupyterLab
+### MATLAB Desktop: Access MATLAB in a Browser from JupyterLab
 * Access MATLAB in a browser from your Jupyter environment.
 * For more information, see [Proxy](src/jupyter_matlab_proxy/README.md).
 ### MATLAB File: Opening a `.m` File in JupyterLab
