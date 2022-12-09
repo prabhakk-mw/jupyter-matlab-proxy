@@ -1,5 +1,8 @@
 // Copyright 2022 The MathWorks, Inc.
 
+// Registers the MATLAB-in-browser desktop button, which will
+// appear in the notebook toolbar.
+
 import {
     JupyterFrontEnd,
     JupyterFrontEndPlugin
@@ -14,38 +17,39 @@ import { IDisposable } from '@lumino/disposable';
 import { matlabIcon } from './icons';
 
 /** Wait until the kernel has loaded, then check if it is a MATLAB kernel. */
-const insertButton = async (panel: NotebookPanel, matlabInBrowserButton: ToolbarButton): Promise<void> => {
+const insertButton = async (panel: NotebookPanel, matlabToolbarButton: ToolbarButton): Promise<void> => {
     await panel.sessionContext.ready;
     if (panel.sessionContext.kernelDisplayName === 'MATLAB Kernel') {
-        panel.toolbar.insertItem(10, 'matlabInBrowserButton', matlabInBrowserButton);
+        panel.toolbar.insertItem(10, 'matlabToolbarButton', matlabToolbarButton);
     }
 };
 
-export class MatlabInBrowserButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel> {
+class MatlabToolbarButtonExtension implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel> {
     createNew (panel: NotebookPanel, context: DocumentRegistry.IContext<INotebookModel>): IDisposable {
         /**  Create the toolbar button to open the MATLAB desktop in-browser. */
-        const matlabInBrowserButton = new ToolbarButton({
+        const matlabToolbarButton = new ToolbarButton({
             className: 'openMATLABButton',
             icon: matlabIcon,
             label: 'Open MATLAB',
             tooltip: 'Open MATLAB',
             onClick: (): void => {
                 const baseUrl = PageConfig.getBaseUrl();
+                // "_blank" is the option to open in a new browser tab
                 window.open(baseUrl + 'matlab', '_blank');
             }
         });
-        insertButton(panel, matlabInBrowserButton);
-        return matlabInBrowserButton;
+        insertButton(panel, matlabToolbarButton);
+        return matlabToolbarButton;
     }
 }
 
-export const matlabInBrowserButtonPlugin: JupyterFrontEndPlugin<void> = {
-    id: '@mathworks/matlabInBrowserButtonPlugin',
+export const matlabToolbarButtonPlugin: JupyterFrontEndPlugin<void> = {
+    id: '@mathworks/matlabToolbarButtonPlugin',
     autoStart: true,
     activate: (
         app: JupyterFrontEnd
     ) => {
-        const matlabInBrowserButton = new MatlabInBrowserButtonExtension();
-        app.docRegistry.addWidgetExtension('Notebook', matlabInBrowserButton);
+        const matlabToolbarButton = new MatlabToolbarButtonExtension();
+        app.docRegistry.addWidgetExtension('Notebook', matlabToolbarButton);
     }
 };

@@ -23,7 +23,7 @@ For more detail, on how to use these features see [Usage](#usage).
 To report any issues or suggestions, see the [Feedback](#feedback) section.
 
 ----
-## Requirements [TO CHECK]
+## Requirements
 
 * MATLAB® R2020b or later is installed and on the system PATH.
   ```bash
@@ -33,13 +33,11 @@ To report any issues or suggestions, see the [Feedback](#feedback) section.
 * The dependencies required to run MATLAB.
   Refer to the Dockerfiles in the [matlab-deps](https://github.com/mathworks-ref-arch/container-images/tree/master/matlab-deps) repository for the desired version of MATLAB.
 
-* JupyterLab version: **3** [TO CHECK]
+* JupyterLab version: **>=3.1**
 
 * Python versions: **3.7** | **3.8** | **3.9**  | **3.10**
   
 * X Virtual Frame Buffer (Xvfb) : (only for Linux® based systems)
-
-  [** TO CHECK: This should be automatically installed as a dependency?**]
 
   Install it on your linux machine using:
   ```bash
@@ -54,7 +52,7 @@ To report any issues or suggestions, see the [Feedback](#feedback) section.
   ```
 * [Browser Requirements](https://www.mathworks.com/support/requirements/browser-requirements.html)
 
-* Supported Operating Systems [TO CHECK]:
+* Supported Operating Systems:
     * Linux®
     * Windows® Operating System ( starting v0.4.0 of matlab-proxy )
     * MacOS (starting v0.5.0 of matlab-proxy )
@@ -73,7 +71,7 @@ You must have [MATLAB](https://www.mathworks.com/help/install/install-products.h
 installing this package will not automatically install MATLAB.
 
 ### Building From Sources
-Building from sources requires Node.js® version 16 [TO CHECK] or higher.
+Building from sources requires Node.js® version 16 or higher.
 To install Node.js see [Node.js downloads](https://nodejs.org/en/download/).
 ```bash
 git clone https://github.com/mathworks/jupyter-matlab-proxy.git
@@ -125,7 +123,7 @@ or use a network license manager. Follow the [licensing](#licensing) instruction
 ## Licensing
 
 * If prompted to do so, enter credentials for a MathWorks account associated with a MATLAB license. If you are using a network license manager, change to the _Network License Manager_ tab and enter the license server address instead.
-To determine the appropriate method for your license type, consult TODO: CHECK IF THIS IS STILL APPROPRIATE [MATLAB Licensing Info](https://github.com/mathworks/jupyter-matlab-proxy/blob/main/MATLAB-Licensing-Info.md).
+To determine the appropriate method for your license type, consult [MATLAB Licensing Info](https://github.com/mathworks/jupyter-matlab-proxy/blob/main/MATLAB-Licensing-Info.md).
 
 <p align="center">
   <img width="400" src="https://github.com/mathworks/jupyter-matlab-proxy/raw/main/img/licensing_GUI.png">

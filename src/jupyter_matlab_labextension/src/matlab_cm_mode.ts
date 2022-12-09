@@ -1,5 +1,7 @@
 // Copyright 2022 The MathWorks, Inc.
 
+// Add the MATLAB mode to CodeMirror.
+
 import {
     JupyterFrontEnd,
     JupyterFrontEndPlugin
@@ -74,6 +76,7 @@ export function defineMATLABMode ({ CodeMirror }: ICodeMirror) {
     });
 }
 
+// The parameter app is required, even if it is not explicitly used.
 export const matlabCodeMirrorPlugin: JupyterFrontEndPlugin<void> = {
     id: '@mathworks/matlabCodeMirrorPlugin',
     autoStart: true,

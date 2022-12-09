@@ -1,5 +1,10 @@
 // Copyright 2022 The MathWorks, Inc.
 
+// Create a command to open a new .m file.
+// Add this command to the Launcher (under "Other"),
+// as well as to the command palette (which is opened via ctrl+shift+c).
+// Also associate .m files with the MATLAB mFile icon.
+
 import {
     JupyterFrontEnd,
     JupyterFrontEndPlugin
@@ -15,7 +20,7 @@ const FACTORY = 'Editor';
 const PALETTE_CATEGORY = 'Other';
 const command = 'matlab:new-matlab-file';
 
-export function registerMFiles ( app: JupyterFrontEnd, launcher: ILauncher | null, palette: ICommandPalette | null) {
+function registerMFiles ( app: JupyterFrontEnd, launcher: ILauncher | null, palette: ICommandPalette | null) {
         const { commands } = app;
         const createNewMatlabFile = async (args: ReadonlyPartialJSONObject) => {
             /** Get the directory in which the MATLAB file must be created;

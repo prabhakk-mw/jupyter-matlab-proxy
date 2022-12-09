@@ -54,5 +54,5 @@ def setup_matlab():
         "timeout": 100,
         "environment": _get_env,
         "absolute_url": True,
-        "launcher_entry": {"title": "MATLAB", "icon_path": icon_path},
+        "launcher_entry": {"title": "MATLAB Desktop", "icon_path": icon_path},
     }

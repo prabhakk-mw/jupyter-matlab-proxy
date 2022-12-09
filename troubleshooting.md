@@ -8,7 +8,7 @@ In the environment that you have installed the package:
     /usr/local/bin/matlab
     ```
 
-* Check if their Python version is 3.6 or higher
+* Check if Python version is 3.6 or higher
     ```bash
     $ python --version
     Python 3.7.3
