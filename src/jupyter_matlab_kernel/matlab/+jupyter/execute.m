@@ -9,6 +9,11 @@ function result = execute(code)
 
 % Copyright 2022 The MathWorks, Inc.
 
+% Embed user MATLAB code in a try-catch block. This is will disable inbuilt
+% ErrorRecovery mechanism. Any exceptions created in user code would be handled
+% by +jupyter/getOrStashExceptions.m
+code = sprintf('try\n%s\ncatch ME\njupyter.getOrStashExceptions(ME)\nend', code);
+
 % Value that needs to be shown in the error message when a particular error
 % displays the file name. The kernel does not have access to the file name
 % of the IPYNB file. Hence, we use a generic name 'Notebook' for the time being.
@@ -81,6 +86,11 @@ for ii = 1:length(outputs)
                 figureLastIndex = ii;
             end
     end
+end
+
+ME = jupyter.getOrStashExceptions([], true);
+if ~isempty(ME)
+    result{end+1} = processStream('stderr', ME.message);
 end
 
 % Helper functions to post process output of type 'matrix', 'variable' and
