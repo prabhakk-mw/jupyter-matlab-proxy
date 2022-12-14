@@ -46,7 +46,7 @@ catch ME
     % have missed an edge case, catch the exception and send it to the user.
     errorMessage.type = 'stream';
     errorMessage.content.name = 'stderr';
-    errorMessage.content.text = ME.message;
+    errorMessage.content.text = ['MATLAB Kernel Error: ' ME.message];
     output = {errorMessage};
 end
 

@@ -154,7 +154,7 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
             # Blocking call, returns after MATLAB is started.
             if not self.startup_checks_completed:
                 self.perform_startup_checks()
-                self.display_output({"type": "stream", "content": {"name": "stdout", "text": "Executing MATLAB code"}})
+                self.display_output({"type": "stream", "content": {"name": "stdout", "text": "Executing MATLAB code ..."}})
                 self.startup_checks_completed = True
 
             # Perform execution and categorization of outputs in MATLAB. Blocks
@@ -311,7 +311,7 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
             if self.is_matlab_licensed:
                 if timeout == 0:
                     self.display_output({"type": "clear_output", "content": {"wait": False}})
-                    self.display_output({"type": "stream", "content": {"name": "stdout", "text": f"Starting MATLAB\n"}})
+                    self.display_output({"type": "stream", "content": {"name": "stdout", "text": f"Starting MATLAB ...\n"}})
                 timeout += 1
             time.sleep(1)
             (
