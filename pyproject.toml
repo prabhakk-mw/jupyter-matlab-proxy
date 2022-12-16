@@ -40,8 +40,9 @@ dependencies = [
     "jupyterlab>=3.1",
     "hatch-jupyter-builder>=0.8.1",
     "jupyter-server-proxy",
-    "jupyter_contrib_nbextensions",
+    "jupyter-contrib-nbextensions",
     "matlab-proxy>=0.2.9",
+    "requests"
 ]
 [tool.hatch.build.targets.wheel]
 packages = [

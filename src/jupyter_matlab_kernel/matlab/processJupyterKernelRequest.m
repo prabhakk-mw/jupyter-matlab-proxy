@@ -31,12 +31,23 @@ function output = processJupyterKernelRequest(request_type, varargin)
 mlock;
 
 % Delegate feature work based on request type
-switch(request_type)
-    case 'execute'
-        code = varargin{1};
-        output = jupyter.execute(code);
-    case 'complete'
-        code = varargin{1};
-        cursorPosition = varargin{2};
-        output = jupyter.complete(code, cursorPosition);
+try
+    switch(request_type)
+        case 'execute'
+            code = varargin{1};
+            output = jupyter.execute(code);
+        case 'complete'
+            code = varargin{1};
+            cursorPosition = varargin{2};
+            output = jupyter.complete(code, cursorPosition);
+    end
+catch ME
+    % The code withing try block should be exception safe. In case anything we
+    % have missed an edge case, catch the exception and send it to the user.
+    errorMessage.type = 'stream';
+    errorMessage.content.name = 'stderr';
+    errorMessage.content.text = ['MATLAB Kernel Error: ' ME.message];
+    output = {errorMessage};
+end
+
 end

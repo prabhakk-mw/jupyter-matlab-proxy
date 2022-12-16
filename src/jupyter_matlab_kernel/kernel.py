@@ -23,7 +23,7 @@ class MATLABConnectionError(Exception):
 
     def __init__(self, message=None):
         if message is None:
-            message = 'Error connecting to MATLAB. Check the status of MATLAB by clicking the "Open MATLAB" button. Restart the kernel after MATLAB is running successfully'
+            message = 'Error connecting to MATLAB. Check the status of MATLAB by clicking the "Open MATLAB" button. Retry after ensuring MATLAB is running successfully'
         super().__init__(message)
 
 
@@ -154,6 +154,7 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
             # Blocking call, returns after MATLAB is started.
             if not self.startup_checks_completed:
                 self.perform_startup_checks()
+                self.display_output({"type": "stream", "content": {"name": "stdout", "text": "Executing MATLAB code ..."}})
                 self.startup_checks_completed = True
 
             # Perform execution and categorization of outputs in MATLAB. Blocks
@@ -173,6 +174,17 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
                     continue
                 self.display_output(data)
         except Exception as e:
+            if isinstance(e, HTTPError):
+                # If exception is an HTTPError, it means MATLAB is unavailable.
+                # Replace the HTTPError with MATLABConnectionError to give
+                # meaningful error message to the user
+                e = MATLABConnectionError()
+
+                # Since MATLAB is not available, we need to perform the startup
+                # checks for subsequent execution requests
+                self.startup_checks_completed = False
+            
+            # Send the exception message to the user.
             self.send_response(
                 self.iopub_socket, "stream", {"name": "stderr", "text": str(e)}
             )
@@ -265,18 +277,14 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
         if self.startup_error is not None:
             raise self.startup_error
 
-        iframe_display_style = "none"
-        if not self.is_matlab_licensed:
-            iframe_display_style = "block"
+        (
+            self.is_matlab_licensed,
+            self.matlab_status,
+        ) = mwi_comm_helpers.fetch_matlab_proxy_status(self.murl, self.headers)
 
-        # Display iframe containing matlab-proxy. The iframe serves two purposes.
-        # 1. Show login window if MATLAB is not licensed using matlab-proxy. After licensing is
-        #    completed, the iframe is hidden.
-        # 2. Render MATLAB desktop in background. When kernel is communicating with MATLAB for
-        #    Jupyter related requests, MATLAB would wait until the desktop is rendered completely
-        #    to ensure all services are initialized.
-        #
-        # The iframe is removed after first MATLAB completes first execution request.
+        # Display iframe containing matlab-proxy to show login window if MATLAB
+        # is not licensed using matlab-proxy. The iframe is removed after MATLAB
+        # has finished startup.
         #
         # This approach does not work when using the kernel in VS Code. We are using relative path
         # as src for iframe to avoid hardcoding any hostname/domain information. This is done to
@@ -284,31 +292,26 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
         # as other browser based Jupyter clients.
         #
         # TODO: Find a workaround for users to be able to use our Jupyter kernel in VS Code.
-        self.display_output(
-            {
-                "type": "display_data",
-                "content": {
-                    "data": {
-                        "text/html": f"""<iframe id="matlabLogin" src={self.server_base_url + "matlab"} width=700 height=600 style="display:{iframe_display_style}"></iframe>
-                                        <script>
-                                            function hideIframe() {{
-                                                matlabLoginIframe = document.getElementById("matlabLogin")
-                                                if (matlabLoginIframe.contentDocument.getElementById("MatlabJsd") != null) {{
-                                                    matlabLoginIframe.style.display = 'none';
-                                                }}
-                                            }};
-                                            setInterval(hideIframe, 200);
-                                        </script>"""
+        if not self.is_matlab_licensed:
+            self.display_output(
+                {
+                    "type": "display_data",
+                    "content": {
+                        "data": {
+                            "text/html": f'<iframe src={self.server_base_url + "matlab"} width=700 height=600"></iframe>'
+                        },
+                        "metadata": {},
                     },
-                    "metadata": {},
-                },
-            }
-        )
+                }
+            )
 
         # Wait until MATLAB is started before sending requests.
         timeout = 0
         while self.matlab_status != "up" and timeout != 15:
             if self.is_matlab_licensed:
+                if timeout == 0:
+                    self.display_output({"type": "clear_output", "content": {"wait": False}})
+                    self.display_output({"type": "stream", "content": {"name": "stdout", "text": f"Starting MATLAB ...\n"}})
                 timeout += 1
             time.sleep(1)
             (

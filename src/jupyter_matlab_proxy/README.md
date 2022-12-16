@@ -1,13 +1,8 @@
-# Jupyter MATLAB Proxy
-----
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/mathworks/jupyter-matlab-proxy/MATLAB%20Jupyter%20Integration?logo=github)](https://github.com/mathworks/jupyter-matlab-proxy/actions) [![PyPI badge](https://img.shields.io/pypi/v/jupyter-matlab-proxy.svg?logo=pypi)](https://pypi.python.org/pypi/jupyter-matlab-proxy) [![codecov](https://codecov.io/gh/mathworks/jupyter-matlab-proxy/branch/main/graph/badge.svg?token=ZW3SESKCSS)](https://codecov.io/gh/mathworks/jupyter-matlab-proxy)
+# Open MATLAB in a browser
 
----
+This module is a part of the `jupyter-matlab-proxy` package and it enables access to MATLAB in a web browser from your Jupyter environment.
 
-The Jupyter MATLAB Proxy enables you to access MATLAB in a web browser from your Jupyter environment.
-It is provided as part of [MATLAB Integration for Jupyter](../../README.md).
-
-`jupyter-matlab-proxy` is a Python® package based on the following packages.
+This functionality is requires the following packages:
 | Package | Description |
 |----|----|
 | [matlab-proxy](https://github.com/mathworks/matlab-proxy) | Provides infrastructure to launch MATLAB and connect to it from a web browser.|
@@ -29,11 +24,11 @@ Upon successful installation of `jupyter-matlab-proxy`, your Jupyter environment
   jupyter lab 
   ```
 
-* If you are using Jupyter Notebook (on the left in figure below), on the `New` menu, select `MATLAB`. If you are using JupyterLab (on the right in figure below), select the MATLAB icon on the launcher.
+* If you are using Jupyter Notebook (on the left in figure below), on the `New` menu, select `MATLAB Desktop`. If you are using JupyterLab (on the right in figure below), select the MATLAB Desktop icon on the launcher.
 
-<p align="center">
-  <img width="600" src="https://github.com/mathworks/jupyter-matlab-proxy/raw/main/img/combined_launchers.png">
-</p>
+|Classic Jupyter | JupyterLab |
+|--|--|
+|<p align="center"><img width="600" src="../../img/classic-jupyter.png"></p> | <p align="center"><img width="600" src="../../img/jupyterlab-notebook-section.png"></p> |
 
 * To enter your license information, see [Licensing](../../README.md#licensing).
 
