@@ -9,10 +9,17 @@ function result = execute(code)
 
 % Copyright 2022 The MathWorks, Inc.
 
-% Embed user MATLAB code in a try-catch block. This is will disable inbuilt
-% ErrorRecovery mechanism. Any exceptions created in user code would be handled
-% by +jupyter/getOrStashExceptions.m
-code = sprintf('try\n%s\ncatch ME\njupyter.getOrStashExceptions(ME)\nend', code);
+% Embed user MATLAB code in a try-catch block for MATLAB versions less than R2022b.
+% This is will disable inbuilt ErrorRecovery mechanism. Any exceptions created in
+% user code would be handled by +jupyter/getOrStashExceptions.m
+if verLessThan('matlab', '9.13')
+    code = sprintf(['try\n'...
+                    '%s\n'...
+                    'catch JupyterKernelME\n'...
+                    'jupyter.getOrStashExceptions(JupyterKernelME)\n'...
+                    'clear JupyterKernelME\n'...
+                    'end'], code);
+end
 
 % Value that needs to be shown in the error message when a particular error
 % displays the file name. The kernel does not have access to the file name
