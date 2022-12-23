@@ -6,8 +6,8 @@ requires = [
 build-backend = "hatchling.build"
 
 [project]
-name = "jupyter-matlab-proxy"
-version = "0.4.2"
+name = "jupyter-matlab-proxy-bash"
+version = "0.5.2"
 description = "Jupyter Server Proxy for MATLAB"
 readme = "README.md"
 requires-python = ">=3.7"

@@ -28,7 +28,7 @@ Please note that a single MATLAB process is used to back all MATLAB notebooks in
 * Tab completion
 * Inline static plot images
 * LaTeX representation for symbolic expressions
-* Function definition within .ipynb file. Functions can only be accessed in the cells that they are defined in
+* Function definition within notebooks. Functions can only be accessed in the cells that they are defined in.
 
 ## Limitations
 * Executing MATLAB code which requires user input such as `input`, `keyboard` are not supported.
