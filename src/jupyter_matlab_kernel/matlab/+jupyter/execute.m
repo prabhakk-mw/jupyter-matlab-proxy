@@ -54,12 +54,7 @@ result = processOutputs(resp.outputs);
 
 function result = processOutputs(outputs)
 result =cell(1,length(outputs));
-
-% For a given execution request, even though many figures are present,
-% only the final output of the figure window is captured. Hence we need
-% to keep track of the last figure type output in the list of outputs
-% for maintaining order of outputs displayed.
-figureLastIndex = 0;
+figureTrackingMap = containers.Map;
 
 % Post process each captured output based on its type.
 for ii = 1:length(outputs)
@@ -83,14 +78,24 @@ for ii = 1:length(outputs)
         case 'stderr'
             result{ii} = processStream('stderr', outputData.text);
         case 'figure'
-            % After all outputs are captured, the final snapshot of figure
-            % window is taken and is added to the end of list of outputs. This
-            % output contains the actual figure data. We post process this
-            % data and store it in the result at the index where the last figure was captured.
-            if isfield(outputData, 'figureImage')
-                result{figureLastIndex} = processFigure(outputData.figureImage);
-            else
-                figureLastIndex = ii;
+            % 'figure' outputType may not necessarily contain the actual image.
+            % Hence, if the 'figure' is a placeholder, we store its position in
+            % a map to preserve the ordering. In a later 'figure' output, if the
+            % actual image data is present, we store the image in the corresponding
+            % placeholder position if it exists, else the current position.
+            if isfield(outputData, 'figurePlaceHolderId')
+                id = outputData.figurePlaceHolderId;
+                if ~figureTrackingMap.isKey(id)
+                    figureTrackingMap(id) = ii;
+                end
+            elseif isfield(outputData, 'figureImage')
+                id = outputData.figureId;
+                if figureTrackingMap.isKey(id)
+                    idx = figureTrackingMap(id);
+                else
+                    idx = ii;
+                end
+                result{idx} = processFigure(outputData.figureImage);
             end
     end
 end

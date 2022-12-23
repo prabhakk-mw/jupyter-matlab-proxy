@@ -135,6 +135,28 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
     # ipykernel Interface API
     # https://ipython.readthedocs.io/en/stable/development/wrapperkernels.html
 
+    async def interrupt_request(self, stream, ident, parent):
+        """
+        Custom handling of interrupt request sent by Jupyter. For more info, look at
+        https://jupyter-client.readthedocs.io/en/stable/messaging.html#kernel-interrupt
+        """
+        try:
+            # Send interrupt request to MATLAB
+            mwi_comm_helpers.send_interrupt_request_to_matlab(self.murl, self.headers)
+
+            # Set the response to interrupt request.
+            content = {"status": "ok"}
+        except Exception as e:
+            # Set the exception information as response to interrupt request
+            content = {
+                "status": "error",
+                "ename": str(type(e).__name__),
+                "evalue": str(e),
+                "traceback": [],
+            }
+
+        self.session.send(stream, "interrupt_reply", content, parent, ident=ident)
+
     def do_execute(
         self,
         code,
@@ -154,7 +176,15 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
             # Blocking call, returns after MATLAB is started.
             if not self.startup_checks_completed:
                 self.perform_startup_checks()
-                self.display_output({"type": "stream", "content": {"name": "stdout", "text": "Executing MATLAB code ..."}})
+                self.display_output(
+                    {
+                        "type": "stream",
+                        "content": {
+                            "name": "stdout",
+                            "text": "Executing ...",
+                        },
+                    }
+                )
                 self.startup_checks_completed = True
 
             # Perform execution and categorization of outputs in MATLAB. Blocks
@@ -174,6 +204,8 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
                     continue
                 self.display_output(data)
         except Exception as e:
+            # TODO: When MATLAB is restarted, path is reset. This may be another
+            # case when we may need to set the startup checks flag to False.
             if isinstance(e, HTTPError):
                 # If exception is an HTTPError, it means MATLAB is unavailable.
                 # Replace the HTTPError with MATLABConnectionError to give
@@ -183,10 +215,17 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
                 # Since MATLAB is not available, we need to perform the startup
                 # checks for subsequent execution requests
                 self.startup_checks_completed = False
-            
+
             # Send the exception message to the user.
-            self.send_response(
-                self.iopub_socket, "stream", {"name": "stderr", "text": str(e)}
+            self.display_output({"type": "clear_output", "content": {"wait": False}})
+            self.display_output(
+                {
+                    "type": "stream",
+                    "content": {
+                        "name": "stderr",
+                        "text": str(e),
+                    },
+                }
             )
         return {
             "status": "ok",
@@ -310,8 +349,18 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
         while self.matlab_status != "up" and timeout != 15:
             if self.is_matlab_licensed:
                 if timeout == 0:
-                    self.display_output({"type": "clear_output", "content": {"wait": False}})
-                    self.display_output({"type": "stream", "content": {"name": "stdout", "text": f"Starting MATLAB ...\n"}})
+                    self.display_output(
+                        {"type": "clear_output", "content": {"wait": False}}
+                    )
+                    self.display_output(
+                        {
+                            "type": "stream",
+                            "content": {
+                                "name": "stdout",
+                                "text": f"Starting MATLAB ...\n",
+                            },
+                        }
+                    )
                 timeout += 1
             time.sleep(1)
             (

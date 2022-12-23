@@ -1,9 +1,12 @@
-function output = processJupyterKernelRequest(request_type, varargin)
+function result = processJupyterKernelRequest(request_type, execution_request_type, varargin)
 % PROCESSJUPYTERKERNELREQUEST An entrypoint function for various Jupyter Kernel
 % features such as code execution, code completion etc.
 %   Inputs:
 %       request_type - string     - identifier to differentiate multiple features.
 %                                   Supported values are "execute" and "complete"
+%       execution_request_type - string - identifier to differentiate how this
+%                                   function is run in MATLAB. Supported values
+%                                   are "feval" and "eval"
 %       varargin     - cell array - additional inputs which vary in number based
 %                                   on value of input request_type
 %                                   - "execute"
@@ -34,7 +37,7 @@ mlock;
 try
     switch(request_type)
         case 'execute'
-            code = varargin{1};
+            code = sprintf(varargin{1});
             output = jupyter.execute(code);
         case 'complete'
             code = varargin{1};
@@ -48,6 +51,22 @@ catch ME
     errorMessage.content.name = 'stderr';
     errorMessage.content.text = ['MATLAB Kernel Error: ' ME.message];
     output = {errorMessage};
+end
+
+if execution_request_type == "feval"
+    result = output;
+elseif execution_request_type == "eval"
+    % Create a temporary file to store the current results.
+    tname = [tempname(getenv("MATLAB_LOG_DIR")) '.txt'];
+
+    % Write the JSON to the temporary file.
+    fid = fopen(tname, 'w');
+    fwrite(fid, jsonencode(output));
+    fclose(fid);
+
+    % Display the path of temporary file so that it is captured as response
+    % to the eval execution request type.
+    disp(tname)
 end
 
 end

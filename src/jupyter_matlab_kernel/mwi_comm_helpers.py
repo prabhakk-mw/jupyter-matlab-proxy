@@ -1,10 +1,12 @@
 # Copyright 2022 The MathWorks, Inc.
 # Helper functions to communicate with matlab-proxy and MATLAB
 
+import json
 import pathlib
 
 import requests
 from matlab_proxy.util.mwi.embedded_connector.helpers import (
+    get_data_to_eval_mcode,
     get_data_to_feval_mcode,
     get_mvm_endpoint,
 )
@@ -53,8 +55,7 @@ def send_execution_request_to_matlab(url, headers, code):
     Raises:
         HTTPError: Occurs when connection to matlab-proxy cannot be established.
     """
-    resp = _send_jupyter_request_to_matlab(url, headers, "execute", [code])
-    return resp["results"][0]
+    return _send_jupyter_request_to_matlab(url, headers, "execute", [code])
 
 
 def send_completion_request_to_matlab(url, headers, code, cursor_pos):
@@ -84,12 +85,42 @@ def send_completion_request_to_matlab(url, headers, code, cursor_pos):
     Raises:
         HTTPError: Occurs when connection to matlab-proxy cannot be established.
     """
-    resp = _send_jupyter_request_to_matlab(url, headers, "complete", [code, cursor_pos])
-    return resp["results"][0]
+    return _send_jupyter_request_to_matlab(url, headers, "complete", [code, cursor_pos])
+
+
+def send_interrupt_request_to_matlab(url, headers):
+    req_body = {
+        "messages": {
+            "Interrupt": [
+                {
+                    "uuid": "1234",
+                }
+            ]
+        }
+    }
+    resp = requests.post(
+        get_mvm_endpoint(url),
+        headers=headers,
+        json=req_body,
+        verify=False,
+    )
+    if resp.status_code != requests.codes.OK:
+        resp.raise_for_status()
 
 
 def _send_feval_request_to_matlab(url, headers, fname, nargout, *args):
-    req_body = get_data_to_feval_mcode(fname, *args, nargout=nargout)
+    # Add the MATLAB code shipped with kernel to the Path
+    path = [str(pathlib.Path(__file__).parent / "matlab")]
+    req_body = get_data_to_feval_mcode("addpath", *path, nargout=0)
+    original_request = get_data_to_feval_mcode(fname, *args, nargout=nargout)
+
+    # Add the FEval message of original request to the req_body FEval list.
+    req_body["messages"]["FEval"].append(original_request["messages"]["FEval"][0])
+
+    # Set the deque mode to make execution synchronous.
+    req_body["messages"]["FEval"][0]["dequeMode"] = "non_debug_prompt"
+    req_body["messages"]["FEval"][1]["dequeMode"] = "non_debug_prompt"
+
     resp = requests.post(
         get_mvm_endpoint(url),
         headers=headers,
@@ -97,29 +128,110 @@ def _send_feval_request_to_matlab(url, headers, fname, nargout, *args):
         verify=False,
     )
     if resp.status_code == requests.codes.OK:
-        data = resp.json()
-        return data["messages"]["FEvalResponse"][0]
+        response_data = resp.json()
+        try:
+            feval_response = response_data["messages"]["FEvalResponse"][1]
+        except KeyError:
+            # In certain cases when the HTTPResponse is received, it does not
+            # contain the expected data. In these cases most likely MATLAB has
+            # gone away. Hence we raise the HTTPError to indicate MATLAB is not
+            # available.
+            raise requests.HTTPError()
+
+        # If the feval request succeeded and outputs are present, return the result.
+        if not feval_response["isError"]:
+            if nargout != 0 and feval_response["results"]:
+                return feval_response["results"][0]
+
+            # Return empty list if there are no outputs in the repsonse
+            return []
+
+        # Handle error case. This happens when "Interrupt Kernel" is issued.
+        if feval_response["messageFaults"][0]["message"] == "":
+            error_message = "Failed to execute. Operation may have interrupted by user."
+        else:
+            error_message = "Failed to execute. Please try again."
+        raise Exception(error_message)
+    else:
+        raise resp.raise_for_status()
+
+
+def _send_eval_request_to_matlab(url, headers, mcode):
+    # Add the MATLAB code shipped with kernel to the Path
+    path = str(pathlib.Path(__file__).parent / "matlab")
+    mcode = path + ";" + mcode
+
+    req_body = get_data_to_eval_mcode(mcode)
+    resp = requests.post(
+        get_mvm_endpoint(url),
+        headers=headers,
+        json=req_body,
+        verify=False,
+    )
+    if resp.status_code == requests.codes.OK:
+        response_data = resp.json()
+        try:
+            eval_response = response_data["messages"]["EvalResponse"][0]
+        except KeyError:
+            # In certain cases when the HTTPResponse is received, it does not
+            # contain the expected data. In these cases most likely MATLAB has
+            # gone away. Hence we raise the HTTPError to indicate MATLAB is not
+            # available.
+            raise requests.HTTPError()
+
+        # If the eval request succeeded, return the json decoded result.
+        if not eval_response["isError"]:
+            result_filepath = eval_response["responseStr"].strip()
+
+            # If the filepath in the response is not empty, read the result from
+            # file and delete the file.
+            if result_filepath != "":
+                with open(result_filepath, "r") as f:
+                    result = f.read().strip()
+
+                try:
+                    import os
+
+                    os.remove(result_filepath)
+                except Exception:
+                    pass
+            else:
+                result = ""
+
+            # If result is empty, populate dummy json
+            if result == "":
+                result = "[]"
+            return json.loads(result)
+
+        # Handle the error cases
+        if eval_response["messageFaults"]:
+            # This happens when "Interrupt Kernel" is issued from a different
+            # kernel. There may be other cases also.
+            error_message = (
+                "Failed to execute. Operation may have been interrupted by user."
+            )
+        else:
+            # This happens when "Interrupt Kernel" is issued from the same kernel.
+            # The responseStr contains the error message
+            error_message = eval_response["responseStr"].strip()
+        raise Exception(error_message)
     else:
         raise resp.raise_for_status()
 
 
 def _send_jupyter_request_to_matlab(url, headers, request_type, inputs):
-    args = [request_type] + inputs
-    resp = _send_feval_request_to_matlab(
-        url, headers, "processJupyterKernelRequest", 1, *args
-    )
-    # The error code returned in response is always MATLAB.codeerror. Hence,
-    # we cannot distinguish "function not found" from other errors. Ideally,
-    # MATLAB code shipped with kernel should be exception safe and the only
-    # error when sending request to MATLAB should be "function not found".
-    #
-    # Going by this assumption, if an error is present in the response, we
-    # treat it as "function not found" and add the path of MATLAB code shipped
-    # with kernel and retry the original request.
-    if resp["isError"]:
-        temp = [str(pathlib.Path(__file__).parent / "matlab")]
-        _send_feval_request_to_matlab(url, headers, "addpath", 0, *temp)
+    execution_request_type = "feval"
+
+    inputs.insert(0, request_type)
+    inputs.insert(1, execution_request_type)
+
+    if execution_request_type == "feval":
         resp = _send_feval_request_to_matlab(
-            url, headers, "processJupyterKernelRequest", 1, *args
+            url, headers, "processJupyterKernelRequest", 1, *inputs
         )
+    else:
+        args = ", ".join(repr(input) for input in inputs)
+        mcode = f"processJupyterKernelRequest({args})"
+        resp = _send_eval_request_to_matlab(url, headers, mcode)
+
     return resp
