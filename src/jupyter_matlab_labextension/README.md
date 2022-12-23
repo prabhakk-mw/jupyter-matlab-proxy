@@ -1,4 +1,4 @@
-# Jupyter MATLAB Labextension
+# MATLAB labextension for JupyterLab
 
 This JupyterLab Labextension provides features to aid working
 with MATLAB code in Jupyter. It is provided as

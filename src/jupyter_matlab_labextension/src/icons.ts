@@ -3,7 +3,6 @@
 import { LabIcon } from '@jupyterlab/ui-components';
 
 import membraneSvgStr from '../style/icons/membrane.svg';
-//import mFileSvgStr from '../style/icons/mFile.svg';
 import newMFileSvgStr from '../style/icons/icon_new_mfile.svg';
 import notebookSvgStr from '../style/icons/icon_notebook.svg';
 import openMATLABSvgStr from '../style/icons/icon_open_matlab.svg';

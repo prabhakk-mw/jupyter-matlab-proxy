@@ -6,8 +6,8 @@ requires = [
 build-backend = "hatchling.build"
 
 [project]
-name = "jupyter-matlab-proxy"
-version = "0.4.2"
+name = "jupyter-matlab-proxy-bash"
+version = "0.5.3"
 description = "Jupyter Server Proxy for MATLAB"
 readme = "README.md"
 requires-python = ">=3.7"
@@ -56,6 +56,7 @@ packages = [
 "src/jupyter_matlab_labextension/jupyter_matlab_labextension/labextension/package.json" = "share/jupyter/labextensions/jupyter_matlab_labextension/package.json"
 "src/jupyter_matlab_kernel/kernel.json" = "share/jupyter/kernels/jupyter_matlab_kernel/kernel.json"
 "img/logo-64x64.png" = "share/jupyter/kernels/jupyter_matlab_kernel/logo-64x64.png"
+"img/logo-svg.svg" = "share/jupyter/kernels/jupyter_matlab_kernel/logo-svg.svg"
 
 [tool.hatch.build.targets.sdist]
 exclude = [
