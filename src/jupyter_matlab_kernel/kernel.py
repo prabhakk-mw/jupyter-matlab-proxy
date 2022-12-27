@@ -114,6 +114,7 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
     # MATLAB Kernel state
     is_matlab_licensed: bool = False
     matlab_status = ""
+    matlab_proxy_has_error: bool = False
     server_base_url = ""
     headers = dict()
     startup_error = None
@@ -128,6 +129,7 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
             (
                 self.is_matlab_licensed,
                 self.matlab_status,
+                self.matlab_proxy_has_error,
             ) = mwi_comm_helpers.fetch_matlab_proxy_status(self.murl, self.headers)
         except (MATLABConnectionError, HTTPError) as err:
             self.startup_error = err
@@ -204,8 +206,6 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
                     continue
                 self.display_output(data)
         except Exception as e:
-            # TODO: When MATLAB is restarted, path is reset. This may be another
-            # case when we may need to set the startup checks flag to False.
             if isinstance(e, HTTPError):
                 # If exception is an HTTPError, it means MATLAB is unavailable.
                 # Replace the HTTPError with MATLABConnectionError to give
@@ -319,6 +319,7 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
         (
             self.is_matlab_licensed,
             self.matlab_status,
+            self.matlab_proxy_has_error,
         ) = mwi_comm_helpers.fetch_matlab_proxy_status(self.murl, self.headers)
 
         # Display iframe containing matlab-proxy to show login window if MATLAB
@@ -346,7 +347,11 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
 
         # Wait until MATLAB is started before sending requests.
         timeout = 0
-        while self.matlab_status != "up" and timeout != 15:
+        while (
+            self.matlab_status != "up"
+            and timeout != 15
+            and not self.matlab_proxy_has_error
+        ):
             if self.is_matlab_licensed:
                 if timeout == 0:
                     self.display_output(
@@ -366,12 +371,13 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
             (
                 self.is_matlab_licensed,
                 self.matlab_status,
+                self.matlab_proxy_has_error,
             ) = mwi_comm_helpers.fetch_matlab_proxy_status(self.murl, self.headers)
 
         # If MATLAB is not available after 15 seconds of licensing information
         # being available either through user input or through matlab-proxy cache,
         # then display connection error to the user.
-        if timeout == 15:
+        if timeout == 15 or self.matlab_proxy_has_error:
             raise MATLABConnectionError
 
     def display_output(self, out):

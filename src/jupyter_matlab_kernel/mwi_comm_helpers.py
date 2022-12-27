@@ -25,6 +25,8 @@ def fetch_matlab_proxy_status(url, headers):
         Tuple (bool, string):
             is_matlab_licensed (bool): True if matlab-proxy has license information, else False.
             matlab_status (string): Status of MATLAB. Values could be "up", "down" and "starting"
+            matlab_proxy_has_error (bool): True if matlab-proxy faced any issues and unable to
+                                           start MATLAB
 
     Raises:
         HTTPError: Occurs when connection to matlab-proxy cannot be established.
@@ -34,7 +36,8 @@ def fetch_matlab_proxy_status(url, headers):
         data = resp.json()
         is_matlab_licensed = data["licensing"] != None
         matlab_status = data["matlab"]["status"]
-        return is_matlab_licensed, matlab_status
+        matlab_proxy_has_error = data["error"] != None
+        return is_matlab_licensed, matlab_status, matlab_proxy_has_error
     else:
         resp.raise_for_status()
 

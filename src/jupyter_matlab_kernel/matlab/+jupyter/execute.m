@@ -115,6 +115,9 @@ result.value = [sprintf("<html><body><pre>%s</pre></body></html>",text), text];
 
 function result = processMatrix(output)
 text = sprintf("%s = %s %s\n%s", output.name, output.header, output.type, output.value);
+if output.rows > 10 || output.columns > 30
+    text = strcat(text, "...");
+end
 result = processText(text);
 
 function result = processVariable(output)

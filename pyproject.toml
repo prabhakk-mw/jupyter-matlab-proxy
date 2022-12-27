@@ -10,6 +10,7 @@ name = "jupyter-matlab-proxy"
 version = "0.5.0"
 description = "Jupyter Server Proxy for MATLAB"
 readme = "README.md"
+license = { file = "LICENSE.md" }
 requires-python = ">=3.7"
 authors = [
     { name = "The MathWorks Inc.", email = "jupyter-support@mathworks.com" },
@@ -37,23 +38,21 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
 ]
 dependencies = [
-    "jupyterlab>=3.1",
-    "hatch-jupyter-builder>=0.8.1",
     "jupyter-server-proxy",
     "jupyter-contrib-nbextensions",
     "matlab-proxy>=0.2.9",
     "requests"
 ]
+
 [tool.hatch.build.targets.wheel]
 packages = [
     "src/jupyter_matlab_kernel",
     "src/jupyter_matlab_proxy"
 ]
-# TODO: The paths here need to be reconsidered.
+
 [tool.hatch.build.targets.wheel.shared-data]
-"src/jupyter_matlab_labextension/jupyter_matlab_labextension/labextension/static" = "share/jupyter/labextensions/jupyter_matlab_labextension/static"
-"src/jupyter_matlab_labextension/jupyter_matlab_labextension/install.json" = "share/jupyter/labextensions/jupyter_matlab_labextension/install.json"
-"src/jupyter_matlab_labextension/jupyter_matlab_labextension/labextension/package.json" = "share/jupyter/labextensions/jupyter_matlab_labextension/package.json"
+"src/jupyter_matlab_labextension/jupyter_matlab_labextension/labextension" = "share/jupyter/labextensions/jupyter_matlab_labextension"
+"src/jupyter_matlab_labextension/install.json" = "share/jupyter/labextensions/jupyter_matlab_labextension/install.json"
 "src/jupyter_matlab_kernel/kernel.json" = "share/jupyter/kernels/jupyter_matlab_kernel/kernel.json"
 "img/logo-64x64.png" = "share/jupyter/kernels/jupyter_matlab_kernel/logo-64x64.png"
 "img/logo-svg.svg" = "share/jupyter/kernels/jupyter_matlab_kernel/logo-svg.svg"
@@ -64,17 +63,14 @@ exclude = [
 ]
 
 [tool.hatch.build.hooks.jupyter-builder]
-dependencies = [
-    "hatch-jupyter-builder>=0.8.1",
-    "jupyter_contrib_nbextensions",
-]
+dependencies = ["hatch-jupyter-builder>=0.8.1"]
 build-function = "hatch_jupyter_builder.npm_builder"
 ensured-targets = [
     "src/jupyter_matlab_labextension/jupyter_matlab_labextension/labextension/static/style.js",
     "src/jupyter_matlab_labextension/jupyter_matlab_labextension/labextension/package.json",
 ]
 skip-if-exists = [
-    "jupyter_matlab_labextension/labextension/static/style.js",
+    "src/jupyter_matlab_labextension/jupyter_matlab_labextension/labextension/static/style.js",
 ]
 
 [tool.hatch.build.hooks.jupyter-builder.editable-build-kwargs]
@@ -90,11 +86,13 @@ npm = [
     "jlpm",
 ]
 
-# TODO These lines give an error when uncommented.
-#[project.optional-dependencies]
-#dev = [
-#    "black; ruamel.yaml; pytest; pytest-cov",
-#]
+[project.optional-dependencies]
+dev = [
+    "black",
+    "ruamel.yaml",
+    "pytest",
+    "pytest-cov",
+]
 
 [project.entry-points.jupyter_serverproxy_servers]
 matlab = "jupyter_matlab_proxy:setup_matlab"
