@@ -8,7 +8,7 @@ The MATLAB® Integration for Jupyter enables you to access MATLAB from your Jupt
 Once installed, you can:
 |Create notebooks for MATLAB | Launch MATLAB in a browser|
 |--|--|
-|<p align="center"><img width="400" src="img/JuptyerKernel.gif"></p>|<p align="center"><img width="400" src="img/JupyterMATLABDesktop.gif"></p>|
+|<p align="center"><img width="600" src="img/JuptyerKernel.gif"></p>|<p align="center"><img width="600" src="img/JupyterMATLABDesktop.gif"></p>|
 
 This package supports both classic Jupyter and JuptyerLab, however, some capabilities may be limited to the JupyterLab interface.
 
