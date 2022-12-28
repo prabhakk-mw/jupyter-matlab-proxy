@@ -3,12 +3,12 @@
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/mathworks/jupyter-matlab-proxy/MATLAB%20Jupyter%20Integration?logo=github)](https://github.com/mathworks/jupyter-matlab-proxy/actions) [![PyPI badge](https://img.shields.io/pypi/v/jupyter-matlab-proxy.svg?logo=pypi)](https://pypi.python.org/pypi/jupyter-matlab-proxy) [![codecov](https://codecov.io/gh/mathworks/jupyter-matlab-proxy/branch/main/graph/badge.svg?token=ZW3SESKCSS)](https://codecov.io/gh/mathworks/jupyter-matlab-proxy)
 
 ---
-The MATLAB® Integration for Jupyter enables you to access MATLAB from your Juptyer environment.
+The MATLAB® Integration for Jupyter enables you to access MATLAB from your Juptyer environment. You can integrate MATLAB with an existing JupyterHub deployment, single user Jupyter Notebook Server, and many other Jupyter-based systems running in the cloud or on-premises.
 
-`jupyter-matlab-proxy` is a Python® package and provides 2 modes of access to MATLAB:
-
-1. `MATLAB Kernel`, enables using Jupyter Notebooks with MATLAB code.
-1. `MATLAB Proxy`, enables browser based access to the MATLAB desktop.
+Once installed, you can:
+|Create notebooks for MATLAB | Launch MATLAB in a browser|
+|--|--|
+|<p align="center"><img width="400" src="img/JuptyerKernel.gif"></p>|<p align="center"><img width="400" src="img/JupyterMATLABDesktop.gif"></p>|
 
 This package supports both classic Jupyter and JuptyerLab, however, some capabilities may be limited to the JupyterLab interface.
 
@@ -27,8 +27,6 @@ This package is under active development to report any issues or suggestions, se
 
 * System dependencies required to run MATLAB.
   - The `base-dependencies.txt` files in the [matlab-deps](https://github.com/mathworks-ref-arch/container-images/tree/master/matlab-deps) repository lists the basic libraries that need to be installed for the desired combination of MATLAB version & Operating system. Refer to the Dockerfiles in the same folder for exemplar usage of these files.</br></br>
-
-* JupyterLab version: **>=3.1** 
   
 * X Virtual Frame Buffer (Xvfb) : (only for Linux® based systems)
 
@@ -51,6 +49,8 @@ This package is under active development to report any issues or suggestions, se
 
 ## Installation
 
+The MATLAB Integration for Jupyter is provided as a Python® package can either be installed from PyPI or can be built from sources as shown below.
+
 ### PyPI
 This repository can be installed directly from the Python Package Index.
 ```bash
@@ -70,7 +70,7 @@ git clone https://github.com/mathworks/jupyter-matlab-proxy.git
 
 cd jupyter-matlab-proxy
 
-python -m pip install .
+python3 -m pip install .
 ```
 
 ## Usage
@@ -95,7 +95,7 @@ environment should present options to launch a Jupyter notebook with a MATLAB ke
 
 When JupyterLab is opened you will be presented with multiple options.
 
-<p align="center">
+<p align="left">
   <img width="500" src="img/jupyterlab_icons.png">
 </p>
 
