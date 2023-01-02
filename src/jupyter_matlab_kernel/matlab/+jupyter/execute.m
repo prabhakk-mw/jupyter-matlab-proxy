@@ -121,7 +121,7 @@ end
 result = processText(text);
 
 function result = processVariable(output)
-text = sprintf("%s = %s\n   %s", output.name, output.header, output.value);
+text = sprintf("%s = %s\n   %s", output.name, output.header, strtrim(output.value));
 result = processText(text);
 
 % Helper function for post-processing symbolic outputs. The captured output

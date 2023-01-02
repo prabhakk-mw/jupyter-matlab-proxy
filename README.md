@@ -3,7 +3,7 @@
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/mathworks/jupyter-matlab-proxy/MATLAB%20Jupyter%20Integration?logo=github)](https://github.com/mathworks/jupyter-matlab-proxy/actions) [![PyPI badge](https://img.shields.io/pypi/v/jupyter-matlab-proxy.svg?logo=pypi)](https://pypi.python.org/pypi/jupyter-matlab-proxy) [![codecov](https://codecov.io/gh/mathworks/jupyter-matlab-proxy/branch/main/graph/badge.svg?token=ZW3SESKCSS)](https://codecov.io/gh/mathworks/jupyter-matlab-proxy)
 
 ---
-The MATLAB® Integration for Jupyter enables you to access MATLAB from your Juptyer environment. You can integrate MATLAB with an existing JupyterHub deployment, single user Jupyter Notebook Server, and many other Jupyter-based systems running in the cloud or on-premises.
+The MATLAB® Integration for Jupyter enables you to access MATLAB from your Jupyter environment. You can integrate MATLAB with an existing JupyterHub deployment, single user Jupyter Notebook Server, and many other Jupyter-based systems running in the cloud or on-premises.
 
 Once installed, you can:
 |Capability| Example|
@@ -158,7 +158,7 @@ A reference architecture that installs `jupyter-matlab-proxy` in a Docker image 
 
 * Kernels cannot restart MATLAB automatically when users explicitly shut MATLAB down using the `exit` command or through the web desktop interface. Users must manually start MATLAB through options provided when they click "Open MATLAB".
 
-* Startin R2022b onwards users can define functions directly in a notebook cell, but they are only accessible from within that cell.
+* Starting R2022b onwards users can define functions directly in a notebook cell, but they are only accessible from within that cell.
 
 * Some MATLAB commands are unavailable for use with notebooks. Typically these are command which require further interaction from users for example: `input`, `keyboard`.
 
