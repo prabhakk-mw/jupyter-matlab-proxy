@@ -1,38 +1,57 @@
 # MATLAB Kernel for Jupyter
 
-This module is a part of the `jupyter-matlab-proxy` package and it provides a MATLAB language kernel for Jupyter.
+This module is a part of the `jupyter-matlab-proxy` package and it provides a Jupyter Kernel for the MATLAB Language.
 
 ## Usage
 
 Upon successful installation of `jupyter-matlab-proxy`, your Jupyter environment should present options to launch MATLAB.
 
-* Open your Jupyter environment by starting jupyter notebook or lab
-  ```bash
-  # For Jupyter Notebook
-  jupyter notebook
+Click on `MATLAB Kernel` to create a Jupyter notebook for MATLAB.
 
-  # For Jupyter Lab
-  jupyter lab 
-  ```
-
-Launch the kernel using the `MATLAB Kernel` option on your Jupyter environment:
 |Classic Jupyter | JupyterLab |
 |--|--|
-|<p align="center"><img width="600" src="../../img/classic-jupyter.png"></p> | <p align="center"><img width="600" src="../../img/jupyterlab-notebook-section.png"></p> |
+|<p align="center"><img width="200" src="../../img/classic-jupyter.png"></p> | <p align="center"><img width="500" src="../../img/jupyterlab-notebook-section.png"></p> |
 
-Please note that a single MATLAB process is used to back all MATLAB notebooks in a given Juptyer session. This implies that all notebooks access the same MATLAB workspace, and explicit care must be taken by notebook authors to avoid 
+## Architecture
 
+|![kernelArchitecture](../../img/kernel-architecture.png)|
+|-|
+
+**Key takeaways:**
+
+* When a notebook is opened, a new kernel is created for it.
+
+* When the first execution request is made the following occurs:
+    * A licensing screen is presented if this information has not been provided previously.
+    * A MATLAB process is launched by Jupyter if one has not been launched previously.
+
+* Every subsequent notebook does **not** ask for licensing information or launch a new MATLAB process.
+
+* Every notebook communicates with MATLAB through the Jupyter notebook server.
+
+* A notebook can be thought of as another view into the MATLAB process.
+    * Any variables or data created through the notebook manifests in the spawned MATLAB process.
+    * This implies that all notebooks access the same MATLAB workspace, and users must keep this in mind when working with notebooks.
+
+* If simulaneous execution requests are made from two notebooks, they are processed by MATLAB in a **first-in, first-out basis**.
+
+* Kernel Interrupts can be requested through the Jupyter interface, and interrupt the execution thats currently processing in MATLAB.
+    * *note*: The request interrupted may not be the one created by the notebook from which the interrupt was requested.
 
 ## Supported Features
 * Execution of MATLAB code
 * Tab completion
 * Inline static plot images
 * LaTeX representation for symbolic expressions
-* Function definition within notebooks. Functions can only be accessed in the cells that they are defined in.
+* **New from R2022b:** Function definition within notebook cells.
+    * Functions can be defined in at the end of cell, and used within that cell.
+    ![cellLocalFunctions](../../img/cell-local-function.png)
+
+
 
 ## Limitations
-* Executing MATLAB code which requires user input such as `input`, `keyboard` are not supported.
-* Kernels cannot restart MATLAB automatically when users explicitly shut MATLAB down using the `exit` command or through the web desktop interface.
+
+Please see the toplevel [README](../../README.md#limitations) file for a listing of the current limitations.
 
 ## Feedback
 
@@ -41,6 +60,6 @@ If you encounter a technical issue or have an enhancement request, create an iss
 
 ----
 
-Copyright (c) 2022 The MathWorks, Inc. All rights reserved.
+Copyright (c) 2023 The MathWorks, Inc. All rights reserved.
 
 ----

@@ -1,4 +1,4 @@
-// Copyright 2022 The MathWorks, Inc.
+// Copyright 2023 The MathWorks, Inc.
 
 // Create a command to open a new .m file.
 // Add this command to the Launcher (under "Other"),

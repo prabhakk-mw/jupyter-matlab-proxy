@@ -69,6 +69,6 @@ If you need to use functionality that is not yet supported, or for versions of M
 
 ----
 
-Copyright (c) 2021-2022 The MathWorks, Inc. All rights reserved.
+Copyright (c) 2021-2023 The MathWorks, Inc. All rights reserved.
 
 ----

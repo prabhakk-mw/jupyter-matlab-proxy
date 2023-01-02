@@ -39,7 +39,7 @@ In the environment that you have installed the package:
     $ pip freeze | grep -E "jupyter|matlab-proxy|jupyter-matlab-proxy"
     ```
 
-* If the integration is not showing up as an option to the dropdown box in the Juptyer notebook:
+* If the integration is not showing up as an option to the dropdown box in the Jupyter notebook:
     ```bash
     #Run the following commands and verify that you are able to see similar output:
     
@@ -74,6 +74,6 @@ In the environment that you have installed the package:
 
 ----
 
-Copyright (c) 2021-2022 The MathWorks, Inc. All rights reserved.
+Copyright (c) 2021-2023 The MathWorks, Inc. All rights reserved.
 
 ----

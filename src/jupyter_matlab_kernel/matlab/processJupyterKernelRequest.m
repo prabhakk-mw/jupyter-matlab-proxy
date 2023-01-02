@@ -28,7 +28,7 @@ function result = processJupyterKernelRequest(request_type, execution_request_ty
 %               - value - string - content of the stream
 %
 
-% Copyright 2022 The MathWorks, Inc.
+% Copyright 2023 The MathWorks, Inc.
 
 % Lock the function on the first use to prevent it from being cleared from the memory
 mlock;

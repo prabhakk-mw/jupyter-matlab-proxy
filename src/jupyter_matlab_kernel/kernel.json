@@ -13,6 +13,6 @@
     "metadata": {
         "debugger": false
     },
-    "copyright": "Copyright 2022 The MathWorks, Inc.",
+    "copyright": "Copyright 2023 The MathWorks, Inc.",
     "description": "Jupyter kernelspec for MATLAB Kernel. For more information, please look at https://jupyter-client.readthedocs.io/en/stable/kernels.html#kernel-specs"
 }

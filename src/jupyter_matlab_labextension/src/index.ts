@@ -1,4 +1,4 @@
-// Copyright 2022 The MathWorks, Inc.
+// Copyright 2023 The MathWorks, Inc.
 
 import { JupyterFrontEndPlugin } from '@jupyterlab/application';
 import { matlabToolbarButtonPlugin } from './matlab_browser_button';

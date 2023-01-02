@@ -8,10 +8,10 @@ The MATLAB® Integration for Jupyter enables you to access MATLAB from your Jupy
 Once installed, you can:
 |Capability| Example|
 |--|--|
-|**Create notebooks for MATLAB** | <p align="center"><img width="600" src="img/JuptyerKernel.gif"></p>|
+|**Create notebooks for MATLAB** | <p align="center"><img width="600" src="img/JupyterKernel.gif"></p>|
 |**Launch MATLAB in a browser**|<p align="center"><img width="600" src="img/JupyterMATLABDesktop.gif"></p>|
 
-This package supports both classic Jupyter and JuptyerLab, however, some capabilities may be limited to the JupyterLab interface.
+This package supports both classic Jupyter and JupyterLab, however, some capabilities may be limited to the JupyterLab interface.
 
 This package is under active development to report any issues or suggestions, see the [Feedback](#feedback) section.
 
@@ -24,7 +24,8 @@ This package is under active development to report any issues or suggestions, se
   ```bash
   # Confirm MATLAB is on the PATH
   which matlab
-  ```  
+  ```
+  *note:* Only required if you want to execute MATLAB code. Viewing notebooks does not require MATLAB to be installed.
 
 * System dependencies required to run MATLAB.
   - The `base-dependencies.txt` files in the [matlab-deps](https://github.com/mathworks-ref-arch/container-images/tree/master/matlab-deps) repository lists the basic libraries that need to be installed for the desired combination of MATLAB version & Operating system. Refer to the Dockerfiles in the same folder for exemplar usage of these files.</br></br>
@@ -90,7 +91,7 @@ environment should present options to launch a Jupyter notebook with a MATLAB ke
 |--|--|
 |<p align="center"><img width="200" src="img/classic-jupyter.png"></p> | <p align="center"><img width="500" src="img/jupyterlab-notebook-section.png"></p> |
 
-## Detailed Usage 
+## Detailed Usage
 When JupyterLab is opened you will be presented with multiple options.
 
 |![jupyterLabIcons](img/jupyterlab_icons.png)|
@@ -126,15 +127,15 @@ For more information, see [Open MATLAB in a browser](src/jupyter_matlab_proxy/RE
 |![open-matlab-button](img/open-matlab-button.png)|
 |-|
 
-### **MATLAB File: Opening a `.m` File in JupyterLab**
+### **MATLAB File: Open a New MATLAB File (.m) in JupyterLab**
 Click the icon below to start editing a new MATLAB File:
 |Icon | MATLAB File |
 |--|--|
 |<p align="center"><img width="100" src="img/new-matlab-file-button.png"></p> | <p align="center"><img width="600" src="img/new-matlab-file.png"></p> |
-* Opens a new `.m` file in a new JupyterLab tab.
+* Opens a new `MATLAB file` in a new JupyterLab tab.
 * MATLAB code in this file will be highlighted appropriately.
-* You can also open a new `.m` file by using the command palette, by using ctrl+shift+c and then typing `New MATLAB File`.
-* Execution of `.m` files in JupyterLab is currently not supported.
+* You can also use the command palette, by using `ctrl+shift+c` and then typing `New MATLAB File`.
+* Execution of `MATLAB Files (.m)` files in JupyterLab is currently **not** supported.
 
 
 ## Licensing
@@ -142,6 +143,7 @@ Click the icon below to start editing a new MATLAB File:
 * If prompted to do so, enter credentials for a MathWorks account associated with a MATLAB license. If you are using a network license manager, change to the _Network License Manager_ tab and enter the license server address instead.
 To determine the appropriate method for your license type, consult [MATLAB Licensing Info](https://github.com/mathworks/jupyter-matlab-proxy/blob/main/MATLAB-Licensing-Info.md).
 
+<p align="center">
 <img width="600" src="https://github.com/mathworks/jupyter-matlab-proxy/raw/main/img/licensing_GUI.png">
 </p>
 
@@ -158,18 +160,47 @@ A reference architecture that installs `jupyter-matlab-proxy` in a Docker image 
 
 * Kernels cannot restart MATLAB automatically when users explicitly shut MATLAB down using the `exit` command or through the web desktop interface. Users must manually start MATLAB through options provided when they click "Open MATLAB".
 
-* Starting R2022b onwards users can define functions directly in a notebook cell, but they are only accessible from within that cell.
+* Starting from R2022b onwards, users can define functions directly in a notebook cell. Such functions are only accessible from within the cell they are defined. Similar to [Add Functions to Scripts](https://mathworks.com/help/matlab/matlab_prog/local-functions-in-scripts.html)
 
-* Some MATLAB commands are unavailable for use with notebooks. Typically these are command which require further interaction from users for example: `input`, `keyboard`.
+* Some MATLAB commands are unavailable for use with notebooks. Typically, these are commands which require further interaction from users for example: `input`, `keyboard`.
 
-* Autoindentation is not supported after `case` statements.
+* MATLAB commands that require user interaction are not supported in notebooks, and may either require the kernel to be interrupted, or require users to `Open MATLAB` to resume execution in the notebook. Examples: `input`, `keyboard`
 
-* Execution of `.m` files from Jupyter is currently not supported.
+* MATLAB Debugger commands are not supported in notebooks. Example: `dbstep, dbup, dbstack ...`
+
+* MATLAB commands which require another browser tab to be opened, need MATLAB to also be opened in a browser tab. For example: `doc`, `appdesigner` etc.
+
+* MATLAB notebooks and MATLAB files do not auto-indent after `case` statements.
 
 * Locally licensed MATLABs are currently not supported. Users must either login using Online Licensing or use a Network License Manager.
 
+* Execution of MATLAB Files (`.m`) files from Jupyter is not supported.
+
+* Handles from Graphical objects do not persist between cells. See below for example:
+
+    |![invalid-handle](img/invalid-handle.png)|
+    |-|
+
+* Graphics functions like `gca, gcf, gco, gcbo, gcbf, clf, cla` which access `current` handles are **scoped to a notebook cell**. The example shows how using GCA to update the title of a figure gives unexpected results:
+    |![gca-issue](img/gca-issue.png)|
+    |-|
+
+* `LASTERR, LASTERROR` do not capture MATLAB errors from execution in notebooks. This is fixed in **MATLAB R2022b**.
+
+* MATLAB functions which create animations are not supported in notebooks. Example: `movie, vibes`
+
+* Notebooks do not show intermediate figures that were created during execution. For example:
+    |![figure-issue](img/figure-issue.png)|
+    |-|
+
+* Notebook results are truncated when there are more than 10 rows or 30 columns of results from MATLAB. This is represented by a `(...)` at the end of the result. Example:
+    |![truncation-issue](img/truncation-issue.png)|
+    |-|
+
+
 ## Troubleshooting
 See [Troubleshooting](./troubleshooting.md) for steps which help investigate common installation issues.
+
 
 ## Feedback
 
@@ -178,6 +209,6 @@ If you encounter a technical issue or have an enhancement request, create an iss
 
 ----
 
-Copyright (c) 2021-2022 The MathWorks, Inc. All rights reserved.
+Copyright (c) 2021-2023 The MathWorks, Inc. All rights reserved.
 
 ----

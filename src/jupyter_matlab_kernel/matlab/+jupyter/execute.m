@@ -7,7 +7,7 @@ function result = execute(code)
 % of a unique Live Script. Hence, each execution request can be considered as
 % creating and running a new Live Script file.
 
-% Copyright 2022 The MathWorks, Inc.
+% Copyright 2023 The MathWorks, Inc.
 
 % Embed user MATLAB code in a try-catch block for MATLAB versions less than R2022b.
 % This is will disable inbuilt ErrorRecovery mechanism. Any exceptions created in

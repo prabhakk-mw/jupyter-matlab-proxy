@@ -1,4 +1,4 @@
-// Copyright 2022 The MathWorks, Inc.
+// Copyright 2023 The MathWorks, Inc.
 
 // Registers the MATLAB-in-browser desktop button, which will
 // appear in the notebook toolbar.

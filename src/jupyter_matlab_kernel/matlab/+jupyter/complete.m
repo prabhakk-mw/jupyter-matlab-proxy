@@ -1,7 +1,7 @@
 function result = complete(code, cursorPosition)
 % COMPLETE A helper function to provide tab completion results
 
-% Copyright 2022 The MathWorks, Inc.
+% Copyright 2023 The MathWorks, Inc.
 
 % Get tab completion data for matlab code. Using evalin('base',..) so that the
 % function workspace does not affect the results.
