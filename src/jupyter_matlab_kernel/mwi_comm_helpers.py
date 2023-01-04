@@ -162,7 +162,7 @@ def _send_feval_request_to_matlab(url, headers, fname, nargout, *args):
 def _send_eval_request_to_matlab(url, headers, mcode):
     # Add the MATLAB code shipped with kernel to the Path
     path = str(pathlib.Path(__file__).parent / "matlab")
-    mcode = path + ";" + mcode
+    mcode = "addpath(\"" + path + "\")" + ";" + mcode
 
     req_body = get_data_to_eval_mcode(mcode)
     resp = requests.post(
@@ -233,8 +233,20 @@ def _send_jupyter_request_to_matlab(url, headers, request_type, inputs):
             url, headers, "processJupyterKernelRequest", 1, *inputs
         )
     else:
-        args = ", ".join(repr(input) for input in inputs)
-        mcode = f"processJupyterKernelRequest({args})"
-        resp = _send_eval_request_to_matlab(url, headers, mcode)
+        user_mcode = inputs[2]
+        # Construct a string which can be evaluated in MATLAB. For example
+        # "processJupyterKernelRequest('execute', 'eval', 'a = "Hello\\n''world''"')".
+        # To achieve this, we need to replace the single-quotes with two single-quotes,
+        # so that MATLAB can properly recognize the single-quotes present in user
+        # code. Also, we need to escape the backslash (\) character so that the
+        # string which needs to be evaluated isn't broken down by MATLAB due to
+        # formatting
+        args = f"'{request_type}', '{execution_request_type}', '" + json.dumps(user_mcode.replace("'", "''")) + f"'"
+        if request_type == "complete":
+            cursor_pos = inputs[3]
+            args = args + "," + str(cursor_pos)
+
+        eval_mcode = f"processJupyterKernelRequest({args})"
+        resp = _send_eval_request_to_matlab(url, headers, eval_mcode)
 
     return resp

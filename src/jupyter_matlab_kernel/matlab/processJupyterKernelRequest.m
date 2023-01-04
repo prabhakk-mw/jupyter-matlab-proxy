@@ -33,14 +33,22 @@ function result = processJupyterKernelRequest(request_type, execution_request_ty
 % Lock the function on the first use to prevent it from being cleared from the memory
 mlock;
 
+code = varargin{1};
+
+% If the code is received through an eval request, it will be JSON encoded to
+% prevent the eval string to be broken down by MATLAB due to formatting. We need
+% to decode the received code to get the original user code. For example
+% "processJupyterKernelRequest('execute', 'eval', 'a = "Hello\\n''world''"')".
+if execution_request_type == "eval"
+    code = jsondecode(code);
+end
+
 % Delegate feature work based on request type
 try
     switch(request_type)
         case 'execute'
-            code = sprintf(varargin{1});
             output = jupyter.execute(code);
         case 'complete'
-            code = varargin{1};
             cursorPosition = varargin{2};
             output = jupyter.complete(code, cursorPosition);
     end
