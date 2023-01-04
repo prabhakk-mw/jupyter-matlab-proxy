@@ -48,6 +48,7 @@ This package is under active development to report any issues or suggestions, se
 * Supported Operating Systems:
     * Linux®
     * MacOS
+    **NOTE** : Support for Windows Operating system is unavailable due to [jupyter-server-proxy/issue#47](https://github.com/jupyterhub/jupyter-server-proxy/issues/147)
 
 ## Installation
 
