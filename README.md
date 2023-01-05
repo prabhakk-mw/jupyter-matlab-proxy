@@ -13,7 +13,7 @@ Once installed, you can:
 
 This package supports both classic Jupyter and JupyterLab, however, some capabilities may be limited to the JupyterLab interface.
 
-This package is under active development to report any issues or suggestions, see the [Feedback](#feedback) section.
+This package is under active development. To report any issues or suggestions, see the [Feedback](#feedback) section.
 
 ----
 ## Requirements
@@ -48,7 +48,8 @@ This package is under active development to report any issues or suggestions, se
 * Supported Operating Systems:
     * Linux®
     * MacOS
-    **NOTE** : Support for Windows Operating system is unavailable due to [jupyter-server-proxy/issue#47](https://github.com/jupyterhub/jupyter-server-proxy/issues/147)
+
+  **NOTE** : Support for Windows Operating system is unavailable due to [jupyter-server-proxy/issue#47](https://github.com/jupyterhub/jupyter-server-proxy/issues/147)
 
 ## Installation
 
