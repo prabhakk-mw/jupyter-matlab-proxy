@@ -2,7 +2,7 @@
 
 This module is a part of the `jupyter-matlab-proxy` package and it enables access to MATLAB in a web browser from your Jupyter environment.
 
-This functionality is requires the following packages:
+This functionality requires the following packages:
 | Package | Description |
 |----|----|
 | [matlab-proxy](https://github.com/mathworks/matlab-proxy) | Provides infrastructure to launch MATLAB and connect to it from a web browser.|
@@ -15,7 +15,7 @@ To report any issues or suggestions, see the [Feedback](#feedback) section.
 
 Upon successful installation of `jupyter-matlab-proxy`, your Jupyter environment should present options to launch MATLAB.
 
-* Open your Jupyter environment by starting jupyter notebook or lab
+* Open your Jupyter environment by starting Jupyter notebook or lab
   ```bash
   # For Jupyter Notebook
   jupyter notebook
