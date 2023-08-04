@@ -29,49 +29,6 @@ class MATLABConnectionError(Exception):
         super().__init__(message)
 
 
-def is_jupyter_testing_enabled():
-    """
-    Checks if testing mode is enabled
-
-    Returns:
-        bool: True if MWI_JUPYTER_TEST environment variable is set to 'true'
-        else False
-    """
-
-    return os.environ.get("MWI_JUPYTER_TEST", "false").lower() == "true"
-
-
-def start_matlab_proxy_for_testing():
-    """
-    Only used for testing purposes. Gets the matlab-proxy server configuration
-    from environment variables and mocks the 'start_matlab_proxy' function
-
-    Returns:
-        Tuple (string, string, dict):
-            url (string): Complete URL to send HTTP requests to matlab-proxy
-            base_url (string): Complete base url for matlab-proxy obtained from tests
-            headers (dict): Empty dictionary
-    """
-
-    import matlab_proxy.util.mwi.environment_variables as mwi_env
-
-    # These environment variables are being set by tests, using dictionary lookup
-    # instead of '.getenv' to make sure that the following line fails with the
-    # Exception 'KeyError' in case the environment variables are not set
-    matlab_proxy_base_url = os.environ[mwi_env.get_env_name_base_url()]
-    matlab_proxy_app_port = os.environ[mwi_env.get_env_name_app_port()]
-
-    # '127.0.0.1' is used instead 'localhost' for testing since Windows machines consume
-    # some time to resolve 'localhost' hostname
-    url = "{protocol}://127.0.0.1:{port}{base_url}".format(
-        protocol="http",
-        port=matlab_proxy_app_port,
-        base_url=matlab_proxy_base_url,
-    )
-    headers = {}
-    return url, matlab_proxy_base_url, headers
-
-
 def start_matlab_proxy():
     """
     Start matlab-proxy registered with the jupyter server which started the
@@ -88,94 +45,90 @@ def start_matlab_proxy():
             headers (dict): HTTP headers required while sending HTTP requests to matlab-proxy
     """
 
-    # If jupyter testing is enabled, then a standalone matlab-proxy server would be
-    # launched by the tests and kernel would expect the configurations of this matlab-proxy
-    # server which is provided through environment variables to 'start_matlab_proxy_for_testing'
-    if is_jupyter_testing_enabled():
-        return start_matlab_proxy_for_testing()
+    # nb_server_list = []
 
-    nb_server_list = []
+    # # The matlab-proxy server, if running, could have been started by either
+    # # "jupyter_server" or "notebook" package.
+    # try:
+    #     from jupyter_server import serverapp
 
-    # The matlab-proxy server, if running, could have been started by either
-    # "jupyter_server" or "notebook" package.
-    try:
-        from jupyter_server import serverapp
+    #     nb_server_list += list(serverapp.list_running_servers())
 
-        nb_server_list += list(serverapp.list_running_servers())
+    #     from notebook import notebookapp
 
-        from notebook import notebookapp
+    #     nb_server_list += list(notebookapp.list_running_servers())
+    # except ImportError:
+    #     pass
 
-        nb_server_list += list(notebookapp.list_running_servers())
-    except ImportError:
-        pass
+    # # Use parent process id of the kernel to filter Jupyter Server from the list.
+    # jupyter_server_pid = os.getppid()
 
-    # Use parent process id of the kernel to filter Jupyter Server from the list.
-    jupyter_server_pid = os.getppid()
+    # # On Windows platforms using venv/virtualenv an intermediate python process spaws the kernel.
+    # # jupyter_server ---spawns---> intermediate_process ---spawns---> jupyter_matlab_kernel
+    # # Thus we need to go one level higher to acquire the process id of the jupyter server.
+    # # Note: conda environments do not require this, and for these environments sys.prefix == sys.base_prefix
+    # is_virtual_env = sys.prefix != sys.base_prefix
+    # if sys.platform == "win32" and is_virtual_env:
+    #     jupyter_server_pid = psutil.Process(jupyter_server_pid).ppid()
 
-    # On Windows platforms using venv/virtualenv an intermediate python process spaws the kernel.
-    # jupyter_server ---spawns---> intermediate_process ---spawns---> jupyter_matlab_kernel
-    # Thus we need to go one level higher to acquire the process id of the jupyter server.
-    # Note: conda environments do not require this, and for these environments sys.prefix == sys.base_prefix
-    is_virtual_env = sys.prefix != sys.base_prefix
-    if sys.platform == "win32" and is_virtual_env:
-        jupyter_server_pid = psutil.Process(jupyter_server_pid).ppid()
+    # nb_server = dict()
+    # found_nb_server = False
+    # for server in nb_server_list:
+    #     if server["pid"] == jupyter_server_pid:
+    #         found_nb_server = True
+    #         nb_server = server
+    #         # Stop iterating over the server list
+    #         break
 
-    nb_server = dict()
-    found_nb_server = False
-    for server in nb_server_list:
-        if server["pid"] == jupyter_server_pid:
-            found_nb_server = True
-            nb_server = server
-            # Stop iterating over the server list
-            break
+    # # Error out if the server is not found!
+    # if found_nb_server == False:
+    #     raise MATLABConnectionError(
+    #         """
+    #         Error: MATLAB Kernel for Jupyter was unable to find the notebook server from which it was spawned!\n
+    #         Resolution: Please relaunch kernel from JupyterLab or Classic Jupyter Notebook.
+    #         """
+    #     )
 
-    # Error out if the server is not found!
-    if found_nb_server == False:
-        raise MATLABConnectionError(
-            """
-            Error: MATLAB Kernel for Jupyter was unable to find the notebook server from which it was spawned!\n
-            Resolution: Please relaunch kernel from JupyterLab or Classic Jupyter Notebook.
-            """
-        )
+    # # Verify that Password is disabled
+    # if nb_server["password"] is True:
+    #     # TODO: To support passwords, we either need to acquire it from Jupyter or ask the user?
+    #     raise MATLABConnectionError(
+    #         """
+    #         Error: MATLAB Kernel could not communicate with MATLAB.\n
+    #         Reason: There is a password set to access the Jupyter server.\n
+    #         Resolution: Delete the cached Notebook password file, and restart the kernel.\n
+    #         See https://jupyter-notebook.readthedocs.io/en/stable/public_server.html#securing-a-notebook-server for more information.
+    #         """
+    #     )
 
-    # Verify that Password is disabled
-    if nb_server["password"] is True:
-        # TODO: To support passwords, we either need to acquire it from Jupyter or ask the user?
-        raise MATLABConnectionError(
-            """
-            Error: MATLAB Kernel could not communicate with MATLAB.\n
-            Reason: There is a password set to access the Jupyter server.\n
-            Resolution: Delete the cached Notebook password file, and restart the kernel.\n
-            See https://jupyter-notebook.readthedocs.io/en/stable/public_server.html#securing-a-notebook-server for more information.
-            """
-        )
-
-    url = "{protocol}://localhost:{port}{base_url}matlab".format(
-        protocol="https" if nb_server["secure"] else "http",
-        port=nb_server["port"],
-        base_url=nb_server["base_url"],
-    )
+    # url = "{protocol}://localhost:{port}{base_url}matlab".format(
+    #     protocol="https" if nb_server["secure"] else "http",
+    #     port=nb_server["port"],
+    #     base_url=nb_server["base_url"],
+    # )
+    url = "http://localhost:8080"
 
     # Fetch JupyterHub API token for HTTP request authentication
     # incase the jupyter server is started by JupyterHub.
-    jh_api_token = os.getenv("JUPYTERHUB_API_TOKEN")
+    # jh_api_token = os.getenv("JUPYTERHUB_API_TOKEN")
 
     # set the token to be used during communication with Jupyter
     # In environments where tokens are set for both nb_server & JupyterHub
     # precedence is given to the nb_server token
-    if nb_server["token"]:
-        token = nb_server["token"]
-    elif jh_api_token:
-        token = jh_api_token
-    else:
-        token = None
+    # if nb_server["token"]:
+    #     token = nb_server["token"]
+    # elif jh_api_token:
+    #     token = jh_api_token
+    # else:
+    #     token = None
 
-    if token:
-        headers = {
-            "Authorization": f"token {token}",
-        }
-    else:
-        headers = None
+    # if token:
+    #     headers = {
+    #         "Authorization": f"token {token}",
+    #     }
+    # else:
+    #     headers = None
+    headers = None
 
     # This is content that is present in the matlab-proxy index.html page which
     # can be used to validate a proper response.
@@ -193,7 +146,7 @@ def start_matlab_proxy():
                 Reason: Possibly due to invalid jupyter security tokens.
                 """
             )
-        return url, nb_server["base_url"], headers
+        return url, '/', headers
     else:
         resp.raise_for_status()
 
@@ -225,7 +178,7 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
         # Call superclass constructor to initialize ipykernel infrastructure
         super(MATLABKernel, self).__init__(*args, **kwargs)
         try:
-            # Start matlab-proxy using the jupyter-matlab-proxy registered endpoint.
+            # Start matlab-proxy using the jupyter-matlab-proxy registered endpoint
             self.murl, self.server_base_url, self.headers = start_matlab_proxy()
             (
                 self.is_matlab_licensed,
