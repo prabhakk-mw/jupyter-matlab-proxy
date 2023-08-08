@@ -392,7 +392,7 @@ class MATLABKernel(ipykernel.kernelbase.Kernel):
                     "type": "display_data",
                     "content": {
                         "data": {
-                            "text/html": f'<iframe src={self.server_base_url + "matlab"} width=700 height=600"></iframe>'
+                            "text/html": f'<iframe src={self.murl} width=700 height=600"></iframe>'
                         },
                         "metadata": {},
                     },
