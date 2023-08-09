@@ -51,7 +51,7 @@ def start_matlab_proxy():
     # Launching matlab-proxy directly
     
     import subprocess
-    command = ['env MWI_APP_PORT=8080 matlab-proxy-app']
+    command = ['env MWI_APP_PORT=8080 nohup matlab-proxy-app & ']
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
     process.wait()
 
