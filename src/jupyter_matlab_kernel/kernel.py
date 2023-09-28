@@ -45,15 +45,15 @@ def start_matlab_proxy():
             headers (dict): HTTP headers required while sending HTTP requests to matlab-proxy
     """
 
-    # use this if matlab-proxy is going to be launched out-side    
+    # use this if matlab-proxy is going to be launched out-side
     url = "http://localhost:8080"
-    
+
     # Launching matlab-proxy directly
-    
-    import subprocess
-    command = ['env MWI_APP_PORT=8080 nohup matlab-proxy-app & ']
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
-    process.wait()
+
+    # import subprocess
+    # command = ['env MWI_APP_PORT=8080 nohup matlab-proxy-app & ']
+    # process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+    # process.wait()
 
     headers = None
 
@@ -73,7 +73,7 @@ def start_matlab_proxy():
                 Reason: Possibly due to invalid jupyter security tokens.
                 """
             )
-        return url, '/', headers
+        return url, "/", headers
     else:
         resp.raise_for_status()
 
