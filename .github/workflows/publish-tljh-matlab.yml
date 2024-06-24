@@ -62,5 +62,5 @@ jobs:
 
       - name: Publish to PyPI.
         uses: pypa/gh-action-pypi-publish@release/v1
-        # with:
-        #     packages-dir: install_guides/the-littlest-jupyterhub/tljh-matlab
+        with:
+          packages-dir: install_guides/the-littlest-jupyterhub/tljh-matlab/dist
