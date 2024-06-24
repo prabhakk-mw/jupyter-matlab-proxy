@@ -39,7 +39,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
           name: release-dists
-          path: dist/
+          path: install_guides/the-littlest-jupyterhub/tljh-matlab/dist/
 
   release-tljh-matlab:
     runs-on: ubuntu-latest
@@ -57,7 +57,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: release-dists
-          path: dist/
+          path: install_guides/the-littlest-jupyterhub/tljh-matlab/dist/
+          # path: dist/
 
       - name: Publish to PyPI.
         uses: pypa/gh-action-pypi-publish@release/v1
