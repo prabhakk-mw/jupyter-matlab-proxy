@@ -8,6 +8,11 @@ on:
   push:
     branches:
       - "main"
+    paths:
+      # Only run tests when there are changes to these folders
+      - "src/**"
+      - "tests/**"
+      - "setup.py"
 
 jobs:
   call-unit-tests:

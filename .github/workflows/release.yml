@@ -9,6 +9,8 @@ on:
 
 jobs:
   call-unit-tests:
+    # Only run release jobs on tags which have `jupyter-matlab-proxy` in them
+    if: ${{ contains(github.ref, 'jupyter-matlab-proxy') }}
     # Runs unit tests
     uses: ./.github/workflows/run-unit-tests.yml
     secrets: inherit
