@@ -58,7 +58,6 @@ jobs:
         with:
           name: release-dists
           path: install_guides/the-littlest-jupyterhub/tljh-matlab/dist/
-          # path: dist/
 
       - name: Publish to PyPI.
         uses: pypa/gh-action-pypi-publish@release/v1
