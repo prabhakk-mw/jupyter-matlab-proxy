@@ -85,5 +85,6 @@ RUN wget -q https://www.mathworks.com/mpm/glnxa64/mpm && \
 
 ENV MATHWORKS_SERVICE_HOST_MANAGED_INSTALL_ROOT=${MSH_MANAGED_INSTALL_ROOT}
 
+RUN ln -fs /workspaces/jupyter-matlab-proxy/.venv/bin/jupyter /usr/local/bin/jupyter
 USER ubuntu
 WORKDIR /home/ubuntu
